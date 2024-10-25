@@ -76,7 +76,7 @@
             ./Cargo.lock
             ./my-common
             ./my-workspace-hack
-            ./owui-ollama
+            ./owui_ollama
             crate
           ];
         };
@@ -94,17 +94,17 @@
         # Version of open-webui I snagged the api from
         openwebuiver = "0.3.32";
 
-        owui-ollama = craneLib.buildPackage (individualCrateArgs // {
-          pname = "owui-ollama";
+        owui_ollama = craneLib.buildPackage (individualCrateArgs // {
+          pname = "owui_ollama";
           version = openwebuiver;
-          cargoExtraArgs = "-p owui-ollama";
-          src = fileSetForCrate ./owui-ollama;
+          cargoExtraArgs = "-p owui_ollama";
+          src = fileSetForCrate ./owui_ollama;
         });
       in
       {
         checks = {
           # Build the crates as part of `nix flake check` for convenience
-          inherit owuicli owui-ollama;
+          inherit owuicli owui_ollama;
 
           # Run clippy (and deny all warnings) on the workspace source,
           # again, reusing the dependency artifacts from above.
@@ -171,7 +171,7 @@
         };
 
         packages = {
-          inherit owuicli owui-ollama;
+          inherit owuicli owui_ollama;
         } // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
           my-workspace-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (commonArgs // {
             inherit cargoArtifacts;
@@ -195,12 +195,14 @@
           # Extra inputs can be added here; cargo and rustc are provided by default.
           packages = [
             pkgs.cargo-hakari
+            pkgs.openapi-generator-cli
             (pkgs.writeScriptBin "rebuild-api-crates" ''
               set -x
               printf "removing existing generated code\n"
-              rm -fr owui-ollama owui-rag
-              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/ollama/openapi.json --generator-name rust --output owui-ollama --package-name owui-ollama --additional-properties supportMiddleware=true --minimal-update
-              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/rag/openapi.json --generator-name rust --output owui-rag --package-name owui-rag --additional-properties supportMiddleware=true --minimal-update
+              rm -fr owui-*
+              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/ollama/openapi.json --generator-name rust --output owui_ollama --package-name owui_ollama
+              sed -i -e 's|/v1|/api|g' openapi/${openwebuiver}/ollama/openapi.json
+              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/rag/openapi.json --generator-name rust --output owui_rag --package-name owui_rag
             '')
           ];
         };

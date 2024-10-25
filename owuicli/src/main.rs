@@ -1,21 +1,49 @@
-//! A cli which will echo every input argument to stdout
+use clap::Parser;
+use std::error::Error;
+use owui_ollama::apis::default_api::get_openai_models_v1_models_get;
+use owui_ollama::apis::configuration::{Configuration, ApiKey};
+
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct Cli {
+    #[arg(short, long)]
+    token: String,
+
+    #[arg(short, long)]
+    host: String,
+
+    #[arg(short, long)]
+    port: u32,
+}
 
 #[tokio::main]
-async fn main() {
-    let (tx, mut rx, fut) = my_common::echo_task(10, "echo".into());
-    let args = std::env::args().skip(1).collect::<Vec<_>>();
+async fn main() -> Result<(), Box<dyn Error>> {
+    let cli = Cli::parse();
+//    println!("args {:?}", cli);
 
-    tokio::spawn(fut);
-    tokio::spawn(async move {
-        for arg in args {
-            if tx.send(arg.into()).await.is_err() {
-                eprintln!("channel was unexpectedly closed");
-                break;
-            }
-        }
-    });
+    let conf = Configuration{
+	base_path: format!("http://{}:{}", cli.host.clone(), cli.port),
+	bearer_access_token: Some(cli.token.clone()),
+	..Configuration::default()
+    };
 
-    while let Some(msg) = rx.recv().await {
-        println!("{msg}");
-    }
+//    println!("conf is {:?}",conf);
+    let blah = get_openai_models_v1_models_get(&conf, None).await?;
+
+    for item in blah.as_object().unwrap(){
+let (key, val) = item;
+        if key == "data" {
+	    for v in val.as_array().unwrap() {
+		for i in v.as_object().unwrap() {
+		    let (k, v) = i;
+		    if k == "name" {
+			if let Some(j) = v.as_str() {
+			    println!("{}", j);
+			}
+		    }
+		}
+	    };
+	};
+    };
+    Ok(())
 }
