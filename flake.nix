@@ -85,15 +85,10 @@
         # This allows consumers to only depend on (and build) only what they need.
         # Though it is possible to build the entire workspace as a single derivation,
         # so this is left up to you on how to organize things
-        my-cli = craneLib.buildPackage (individualCrateArgs // {
-          pname = "my-cli";
-          cargoExtraArgs = "-p my-cli";
-          src = fileSetForCrate ./my-cli;
-        });
-        my-server = craneLib.buildPackage (individualCrateArgs // {
-          pname = "my-server";
-          cargoExtraArgs = "-p my-server";
-          src = fileSetForCrate ./my-server;
+        owuicli = craneLib.buildPackage (individualCrateArgs // {
+          pname = "owuicli";
+          cargoExtraArgs = "-p owuicli";
+          src = fileSetForCrate ./owuicli;
         });
 
         # Version of open-webui I snagged the api from
@@ -109,7 +104,7 @@
       {
         checks = {
           # Build the crates as part of `nix flake check` for convenience
-          inherit my-cli my-server owui-ollama;
+          inherit owuicli owui-ollama;
 
           # Run clippy (and deny all warnings) on the workspace source,
           # again, reusing the dependency artifacts from above.
@@ -176,19 +171,17 @@
         };
 
         packages = {
-          inherit my-cli my-server owui-ollama;
+          inherit owuicli owui-ollama;
         } // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
           my-workspace-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (commonArgs // {
             inherit cargoArtifacts;
           });
+          default = owuicli;
         };
 
         apps = {
-          my-cli = flake-utils.lib.mkApp {
-            drv = my-cli;
-          };
-          my-server = flake-utils.lib.mkApp {
-            drv = my-server;
+          owuicli = flake-utils.lib.mkApp {
+            drv = owuicli;
           };
         };
 

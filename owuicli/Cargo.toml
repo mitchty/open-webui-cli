@@ -1,5 +1,5 @@
 [package]
-name = "my-cli"
+name = "owuicli"
 version.workspace = true
 edition.workspace = true
 publish = false
