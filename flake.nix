@@ -212,13 +212,15 @@
           packages = [
             pkgs.cargo-hakari
             pkgs.openapi-generator-cli
+            (pkgs.writeScriptBin "fmtall" ''
+              taplo fmt
+              cargo fmt
+            '')
             (pkgs.writeScriptBin "rebuild-api-crates" ''
-                            set -x
-                            printf "removing existing generated code\n"
-                            rm -fr owui-* api
-                            ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/ollama/openapi.json --generator-name rust --output api/ollama --package-name ollama
-              #              find api/ollama -type f -exec sed -i -e 's|/v1|/api|g' {} \;
-                            ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/rag/openapi.json --generator-name rust --output api/rag --package-name rag
+              printf "removing existing generated code\n"
+              rm -fr api
+              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/ollama/openapi.json --generator-name rust --output api/ollama --package-name ollama
+              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/rag/openapi.json --generator-name rust --output api/rag --package-name rag
             '')
           ];
         };

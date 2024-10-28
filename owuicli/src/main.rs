@@ -117,9 +117,9 @@ async fn main() -> Result<()> {
     let apiconf = Configuration::default();
 
     let conf = Configuration {
-        base_path: format!("http://{}:{}{}", uri, port,apiconf.base_path),
+        base_path: format!("http://{}:{}{}", uri, port, apiconf.base_path),
         bearer_access_token: Some(token),
-	user_agent: Some("open-webui-cli/rust".to_owned()),
+        user_agent: Some("open-webui-cli/rust".to_owned()),
         ..Configuration::default()
     };
 
@@ -127,12 +127,9 @@ async fn main() -> Result<()> {
         Commands::Llm(sc) => match &sc.subcommand {
             Llmcommands::List => {
                 if let Ok(thing) = get_openai_models_v1_models_get(&conf, None).await {
-                    //		    println!("dbg: {:?}", thing);
-
                     let test: ModelVec = serde_json::from_value(thing.clone())?;
 
                     for t in test.data.iter() {
-//                        println!("dbg: {:?}", t);
                         println!("{}", t.id);
                     }
                 }
