@@ -833,7 +833,7 @@ pub async fn generate_openai_chat_completion_v1_chat_completions_post(configurat
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/api/chat/completions", local_var_configuration.base_path);
+    let local_var_uri_str = format!("{}/v1/chat/completions", local_var_configuration.base_path);
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
     if let Some(ref local_var_str) = url_idx {
@@ -867,7 +867,7 @@ pub async fn generate_openai_chat_completion_v1_chat_completions_url_idx_post(co
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/api/chat/completions/{url_idx}", local_var_configuration.base_path, url_idx=url_idx.unwrap());
+    let local_var_uri_str = format!("{}/v1/chat/completions/{url_idx}", local_var_configuration.base_path, url_idx=url_idx.unwrap());
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
@@ -1078,7 +1078,7 @@ pub async fn get_openai_models_v1_models_get(configuration: &configuration::Conf
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/api/models", local_var_configuration.base_path);
+    let local_var_uri_str = format!("{}/v1/models", local_var_configuration.base_path);
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
     if let Some(ref local_var_str) = url_idx {
@@ -1111,7 +1111,7 @@ pub async fn get_openai_models_v1_models_url_idx_get(configuration: &configurati
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/api/models/{url_idx}", local_var_configuration.base_path, url_idx=url_idx.unwrap());
+    let local_var_uri_str = format!("{}/v1/models/{url_idx}", local_var_configuration.base_path, url_idx=url_idx.unwrap());
     let mut local_var_req_builder = local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {

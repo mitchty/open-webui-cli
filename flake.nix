@@ -27,7 +27,14 @@
 
         inherit (pkgs) lib;
 
-        craneLib = crane.mkLib pkgs;
+        # From https://github.com/ipetkov/crane/blob/fa8b7445ddadc37850ed222718ca86622be01967/docs/advanced/overriding-function-behavior.md?plain=1#L20C1-L28C6
+        craneLib = (crane.mkLib pkgs).overrideScope (final: prev: {
+          # TODO figure out a way to build a debug and release profile of things
+          mkCargoDerivation = args: prev.mkCargoDerivation ({
+            CARGO_PROFILE = "dev";
+          } // args);
+        });
+
         src = craneLib.cleanCargoSource ./.;
 
         # Common arguments can be set here to avoid repeating them later
@@ -40,6 +47,7 @@
           ] ++ lib.optionals pkgs.stdenv.isDarwin [
             # Additional darwin specific inputs can be set here
             pkgs.libiconv
+            pkgs.darwin.apple_sdk.frameworks.SystemConfiguration
           ];
 
           # Additional environment variables can be set directly
@@ -76,7 +84,7 @@
             ./Cargo.lock
             ./my-common
             ./my-workspace-hack
-            ./owui_ollama
+            ./api/ollama
             crate
           ];
         };
@@ -91,20 +99,27 @@
           src = fileSetForCrate ./owuicli;
         });
 
+        owuicli-release = craneLib.buildPackage (individualCrateArgs // {
+          pname = "owuicli";
+          cargoExtraArgs = "-p owuicli";
+          src = fileSetForCrate ./owuicli;
+          CARGO_PROFILE = "release";
+        });
+
         # Version of open-webui I snagged the api from
         openwebuiver = "0.3.32";
 
-        owui_ollama = craneLib.buildPackage (individualCrateArgs // {
-          pname = "owui_ollama";
+        ollama = craneLib.buildPackage (individualCrateArgs // {
+          pname = "ollama";
           version = openwebuiver;
           cargoExtraArgs = "-p owui_ollama";
-          src = fileSetForCrate ./owui_ollama;
+          src = fileSetForCrate ./api/ollama;
         });
       in
       {
         checks = {
           # Build the crates as part of `nix flake check` for convenience
-          inherit owuicli owui_ollama;
+          inherit owuicli ollama;
 
           # Run clippy (and deny all warnings) on the workspace source,
           # again, reusing the dependency artifacts from above.
@@ -171,12 +186,13 @@
         };
 
         packages = {
-          inherit owuicli owui_ollama;
+          inherit owuicli ollama;
+          default = owuicli;
+          release = owuicli-release;
         } // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
           my-workspace-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (commonArgs // {
             inherit cargoArtifacts;
           });
-          default = owuicli;
         };
 
         apps = {
@@ -197,12 +213,12 @@
             pkgs.cargo-hakari
             pkgs.openapi-generator-cli
             (pkgs.writeScriptBin "rebuild-api-crates" ''
-              set -x
-              printf "removing existing generated code\n"
-              rm -fr owui-*
-              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/ollama/openapi.json --generator-name rust --output owui_ollama --package-name owui_ollama
-              sed -i -e 's|/v1|/api|g' openapi/${openwebuiver}/ollama/openapi.json
-              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/rag/openapi.json --generator-name rust --output owui_rag --package-name owui_rag
+                            set -x
+                            printf "removing existing generated code\n"
+                            rm -fr owui-* api
+                            ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/ollama/openapi.json --generator-name rust --output api/ollama --package-name ollama
+              #              find api/ollama -type f -exec sed -i -e 's|/v1|/api|g' {} \;
+                            ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/rag/openapi.json --generator-name rust --output api/rag --package-name rag
             '')
           ];
         };

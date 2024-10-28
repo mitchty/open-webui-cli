@@ -7,6 +7,8 @@ publish = false
 [dependencies]
 clap = { version = "4.5.20", features = ["derive"] }
 my-common = { path = "../my-common" }
-owui_ollama= { path = "../owui_ollama" }
+ollama= { path = "../api/ollama" }
 my-workspace-hack = { version = "0.1", path = "../my-workspace-hack" }
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+serde = "1.0.213"
+serde_json = "1.0.132"

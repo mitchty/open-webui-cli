@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["owuicli", "my-*", "my-workspace-hack", "owui_ollama"]
+members = ["owuicli", "my-*", "my-workspace-hack", "api/*"]
 
 [workspace.package]
 version = "0.1.0"
@@ -8,3 +8,12 @@ edition = "2021"
 
 [workspace.metadata.crane]
 name = "my-workspace"
+
+[profile.dev]
+opt-level = 0
+
+# All this is great just slow af so turn on when needed.
+[profile.release]
+codegen-units = 1
+lto = "fat"
+opt-level = "z"

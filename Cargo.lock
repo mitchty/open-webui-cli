@@ -790,6 +790,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "ollama"
+version = "0.1.0"
+dependencies = [
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "serde_with",
+ "url",
+ "uuid",
+]
+
+[[package]]
 name = "once_cell"
 version = "1.20.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -840,28 +853,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "owui_ollama"
-version = "0.1.0"
-dependencies = [
- "my-common",
- "my-workspace-hack",
- "reqwest",
- "serde",
- "serde_json",
- "serde_repr",
- "serde_with",
- "url",
- "uuid",
-]
-
-[[package]]
 name = "owuicli"
 version = "0.1.0"
 dependencies = [
  "clap",
  "my-common",
  "my-workspace-hack",
- "owui_ollama",
+ "ollama",
+ "serde",
+ "serde_json",
  "tokio",
 ]
 
@@ -934,6 +934,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b5b9d34b8991d19d98081b46eacdd8eb58c6f2b201139f7c5f643cc155a633af"
 dependencies = [
  "proc-macro2",
+]
+
+[[package]]
+name = "rag"
+version = "0.1.0"
+dependencies = [
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "serde_with",
+ "url",
+ "uuid",
 ]
 
 [[package]]
