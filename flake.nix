@@ -221,6 +221,9 @@
               rm -fr api
               ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/ollama/openapi.json --generator-name rust --output api/ollama --package-name ollama
               ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/rag/openapi.json --generator-name rust --output api/rag --package-name rag
+              sed -i -e "s/Unlicense/BlueOak-1.0.0/g" api/*/Cargo.toml
+              taplo fmt
+              cargo fmt
             '')
           ];
         };
