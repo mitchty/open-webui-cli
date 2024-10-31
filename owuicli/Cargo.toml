@@ -9,6 +9,8 @@ clap = { version = "4.5.20", features = ["derive"] }
 my-common = { path = "../my-common" }
 my-workspace-hack = { version = "0.1", path = "../my-workspace-hack" }
 ollama = { path = "../api/ollama" }
+rag = { path = "../api/rag" }
 serde = "1.0.213"
 serde_json = "1.0.132"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+webui = { path = "../api/webui" }

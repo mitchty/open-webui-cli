@@ -23,7 +23,12 @@ ollamadir="${destver}/ollama"
 install -dm755 "${ollamadir}"
 curl -s "${HOST}/ollama/openapi.json" -o - | jq > "${ollamadir}/openapi.json"
 
-# Rag api
+# rag api
 ragdir="${destver}/rag"
 install -dm755 "${ragdir}"
 curl -s "${HOST}/retrieval/api/v1/openapi.json" -o - | jq > "${ragdir}/openapi.json"
+
+# webui api
+webuidir="${destver}/webui"
+install -dm755 "${webuidir}"
+curl -s "${HOST}/api/v1/openapi.json" -o - | jq > "${webuidir}/openapi.json"

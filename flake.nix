@@ -85,6 +85,8 @@
             ./my-common
             ./my-workspace-hack
             ./api/ollama
+            ./api/rag
+            ./api/webui
             crate
           ];
         };
@@ -217,13 +219,25 @@
               cargo fmt
             '')
             (pkgs.writeScriptBin "rebuild-api-crates" ''
+              set -xe
               printf "removing existing generated code\n"
               rm -fr api
               ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/ollama/openapi.json --generator-name rust --output api/ollama --package-name ollama
               ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/rag/openapi.json --generator-name rust --output api/rag --package-name rag
+
+              # This spec is invalid? wtf
+              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/webui/openapi.json --generator-name rust --output api/webui --package-name webui --skip-validate-spec
+              (cd api/webui && cargo add reqwest --features stream)
+
+              # I dunno wat the real license should be its generated who cares.
               sed -i -e "s/Unlicense/BlueOak-1.0.0/g" api/*/Cargo.toml
+
               taplo fmt
               cargo fmt
+
+              # Patch the incompetently produced openapi code from openapi-generate-cli to actually work
+              patch -p1 < ./patches/webui.patch
+
             '')
           ];
         };
