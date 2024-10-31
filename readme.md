@@ -10,6 +10,7 @@ Have to setup an api token to use underneath this is doing bearer access token a
 
 - /ollama/v1/models GET -> llm list
 - /ollama/api/generate POST -> llm query
+- /webui/api/v1/files POST -> rag upload
 
 Too many more to implement yet. Pr's welcome. I'll likely only implement what I need.
 
