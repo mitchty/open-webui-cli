@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["owuicli", "my-*", "my-workspace-hack", "api/*"]
+members = ["owuicli", "my-common", "my-workspace-hack", "api/*"]
 
 [workspace.package]
 version = "0.1.0"

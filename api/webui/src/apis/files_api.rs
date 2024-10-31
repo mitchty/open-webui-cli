@@ -213,7 +213,7 @@ pub async fn get_file_by_id_files_id_get(
 pub async fn get_file_content_by_id_files_id_content_file_name_get(
     configuration: &configuration::Configuration,
     id: &str,
-    file_name: &str
+    file_name: &str,
 ) -> Result<models::FileModel, Error<GetFileContentByIdFilesIdContentFileNameGetError>> {
     let local_var_configuration = configuration;
 
