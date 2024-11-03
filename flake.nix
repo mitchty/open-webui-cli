@@ -82,8 +82,8 @@
           fileset = lib.fileset.unions [
             ./Cargo.toml
             ./Cargo.lock
-            ./my-common
-            ./my-workspace-hack
+            ./common
+            ./hakari
             ./api/ollama
             ./api/rag
             ./api/webui
@@ -95,33 +95,26 @@
         # This allows consumers to only depend on (and build) only what they need.
         # Though it is possible to build the entire workspace as a single derivation,
         # so this is left up to you on how to organize things
-        owuicli = craneLib.buildPackage (individualCrateArgs // {
-          pname = "owuicli";
-          cargoExtraArgs = "-p owuicli";
-          src = fileSetForCrate ./owuicli;
+        open-webui-cli = craneLib.buildPackage (individualCrateArgs // {
+          pname = "open-webui-clii";
+          cargoExtraArgs = "-p open-webui-cli";
+          src = fileSetForCrate ./cli;
         });
 
-        owuicli-release = craneLib.buildPackage (individualCrateArgs // {
-          pname = "owuicli";
-          cargoExtraArgs = "-p owuicli";
-          src = fileSetForCrate ./owuicli;
+        open-webui-cli-release = craneLib.buildPackage (individualCrateArgs // {
+          pname = "open-webui-cli";
+          cargoExtraArgs = "-p open-webui-cli";
+          src = fileSetForCrate ./cli;
           CARGO_PROFILE = "release";
         });
 
         # Version of open-webui I snagged the api from
         openwebuiver = "0.3.32";
-
-        ollama = craneLib.buildPackage (individualCrateArgs // {
-          pname = "ollama";
-          version = openwebuiver;
-          cargoExtraArgs = "-p owui_ollama";
-          src = fileSetForCrate ./api/ollama;
-        });
       in
       {
         checks = {
           # Build the crates as part of `nix flake check` for convenience
-          inherit owuicli ollama;
+          inherit open-webui-cli;
 
           # Run clippy (and deny all warnings) on the workspace source,
           # again, reusing the dependency artifacts from above.
@@ -129,49 +122,49 @@
           # Note that this is done as a separate derivation so that
           # we can block the CI if there are issues here, but not
           # prevent downstream consumers from building our crate by itself.
-          my-workspace-clippy = craneLib.cargoClippy (commonArgs // {
+          open-webui-cli-clippy = craneLib.cargoClippy (commonArgs // {
             inherit cargoArtifacts;
             cargoClippyExtraArgs = "--all-targets -- --deny warnings";
           });
 
-          my-workspace-doc = craneLib.cargoDoc (commonArgs // {
+          open-webui-cli-doc = craneLib.cargoDoc (commonArgs // {
             inherit cargoArtifacts;
           });
 
           # Check formatting
-          my-workspace-fmt = craneLib.cargoFmt {
+          open-webui-cli-fmt = craneLib.cargoFmt {
             inherit src;
           };
 
-          my-workspace-toml-fmt = craneLib.taploFmt {
+          open-webui-cli-toml-fmt = craneLib.taploFmt {
             src = pkgs.lib.sources.sourceFilesBySuffices src [ ".toml" ];
             # taplo arguments can be further customized below as needed
             # taploExtraArgs = "--config ./taplo.toml";
           };
 
           # Audit dependencies
-          my-workspace-audit = craneLib.cargoAudit {
+          open-webui-cli-audit = craneLib.cargoAudit {
             inherit src advisory-db;
           };
 
           # Audit licenses
-          my-workspace-deny = craneLib.cargoDeny {
+          open-webui-cli-deny = craneLib.cargoDeny {
             inherit src;
           };
 
           # Run tests with cargo-nextest
           # Consider setting `doCheck = false` on other crate derivations
           # if you do not want the tests to run twice
-          my-workspace-nextest = craneLib.cargoNextest (commonArgs // {
+          open-webui-cli-nextest = craneLib.cargoNextest (commonArgs // {
             inherit cargoArtifacts;
             partitions = 1;
             partitionType = "count";
           });
 
           # Ensure that cargo-hakari is up to date
-          my-workspace-hakari = craneLib.mkCargoDerivation {
+          open-webui-cli-hakari = craneLib.mkCargoDerivation {
             inherit src;
-            pname = "my-workspace-hakari";
+            pname = "open-webui-cli-hakari";
             cargoArtifacts = null;
             doInstallCargoArtifacts = false;
 
@@ -188,9 +181,9 @@
         };
 
         packages = {
-          inherit owuicli ollama;
-          default = owuicli;
-          release = owuicli-release;
+          inherit open-webui-cli;
+          default = open-webui-cli;
+          release = open-webui-cli-release;
         } // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
           my-workspace-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (commonArgs // {
             inherit cargoArtifacts;
@@ -198,8 +191,8 @@
         };
 
         apps = {
-          owuicli = flake-utils.lib.mkApp {
-            drv = owuicli;
+          open-webui-cli = flake-utils.lib.mkApp {
+            drv = open-webui-cli;
           };
         };
 

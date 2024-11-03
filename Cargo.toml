@@ -1,18 +1,19 @@
 [workspace]
 resolver = "2"
-members = ["owuicli", "my-common", "my-workspace-hack", "api/*"]
+members = ["cli", "common", "hakari", "api/*"]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
 
 [workspace.metadata.crane]
-name = "my-workspace"
+name = "open-webui-cli"
 
 [profile.dev]
 opt-level = 0
 
-# All this is great just slow af so turn on when needed.
+# All this is great just slow af so turn on when needed or just for ci builds to
+# abuse.
 [profile.release]
 codegen-units = 1
 lto = "fat"

@@ -1,11 +1,11 @@
 [package]
-name = "my-common"
+name = "common"
 version.workspace = true
 edition.workspace = true
 publish = false
 
 [dependencies]
-my-workspace-hack = { version = "0.1", path = "../my-workspace-hack" }
+hakari = { version = "0.1", path = "../hakari" }
 tokio = { version = "1", features = ["sync"] }
 
 # Copypasta deps from the generated junk here
