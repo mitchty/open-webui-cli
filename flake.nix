@@ -96,7 +96,7 @@
         # Though it is possible to build the entire workspace as a single derivation,
         # so this is left up to you on how to organize things
         open-webui-cli = craneLib.buildPackage (individualCrateArgs // {
-          pname = "open-webui-clii";
+          pname = "open-webui-cli";
           cargoExtraArgs = "-p open-webui-cli";
           src = fileSetForCrate ./cli;
         });
