@@ -1,6 +1,5 @@
 use std::error::Error;
 
-use serde::{Deserialize, Serialize};
 
 use webui::apis::files_api::upload_file_files_post;
 
