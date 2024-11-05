@@ -35,7 +35,15 @@
           } // args);
         });
 
-        src = craneLib.cleanCargoSource ./.;
+        jsonFilter = path: _type: builtins.match ".*json$" path != null;
+
+        srcFilter = path: type: (jsonFilter path type) || (craneLib.filterCargoSources path type);
+
+        src = lib.cleanSourceWith {
+          src = ./.;
+          filter = srcFilter;
+          name = "source";
+        };
 
         sslArgs = {
           OPENSSL_DIR = "${pkgs.openssl.dev}";
@@ -90,6 +98,7 @@
             ./api/ollama
             ./api/rag
             ./api/webui
+            ./openapi/${openwebuiver}
             crate
           ];
         };

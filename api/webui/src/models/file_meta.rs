@@ -14,11 +14,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct FileMeta {
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    pub name: Option<Box<models::Name>>,
+    pub name: Option<String>,
     #[serde(rename = "content_type", skip_serializing_if = "Option::is_none")]
-    pub content_type: Option<Box<models::ContentType>>,
+    pub content_type: Option<String>,
     #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
-    pub size: Option<Box<models::Size>>,
+    pub size: Option<u32>,
 }
 
 impl FileMeta {

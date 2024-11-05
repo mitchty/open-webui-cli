@@ -18,11 +18,9 @@ pub struct FileModelResponse {
     #[serde(rename = "user_id")]
     pub user_id: String,
     #[serde(rename = "hash", skip_serializing_if = "Option::is_none")]
-    pub hash: Option<Box<models::Hash>>,
+    pub hash: Option<String>,
     #[serde(rename = "filename")]
     pub filename: String,
-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
-    pub data: Option<Box<models::Data>>,
     #[serde(rename = "meta")]
     pub meta: models::FileMeta,
     #[serde(rename = "created_at")]
@@ -45,7 +43,6 @@ impl FileModelResponse {
             user_id,
             hash: None,
             filename,
-            data: None,
             meta,
             created_at,
             updated_at,

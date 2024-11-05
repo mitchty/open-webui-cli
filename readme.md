@@ -11,6 +11,7 @@ Have to setup an api token to use underneath this is doing bearer access token a
 - /ollama/v1/models GET -> llm list
 - /ollama/api/generate POST -> llm query
 - /webui/api/v1/files POST -> rag upload
+- /webui/api/v1/knowledge POST -> rag create
 
 Too many more to implement yet. Pr's welcome. I'll likely only implement what I need.
 
@@ -26,12 +27,11 @@ Abuse at your own risk.
 
 A metric ton of stuff ordered by priority:
 - musl static build with github release/action for linux x86/arm
-- rag api
 - chat api so you can use ^^^
 - delete/add llm models
 - define new models based on existing
 - ?
 - More auth types?
-- Better error handling? (I cheaped out on a lot of this for now)
+- Better error handling? (I cheaped out on a lot of this for now, using anyhow so should be able to improve it with some effort)
 - macos/windows binaries for releases too?
 - unit tests? Not sure how I want to do this for the moment

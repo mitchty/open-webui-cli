@@ -8,12 +8,13 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 
 use std::fmt;
+use webui::models::{KnowledgeFileIdForm, KnowledgeForm};
 
 // All the actual async fn calls are in these castles. module names == top level
 // cli command, fn == subcommand name so future me can fix this in post more
 // easily.
-use super::llm::{list, query};
-use super::rag::upload;
+use super::llm::*;
+use super::rag::*;
 
 // I'm lazy so just for now have a lame af error struct. Future mitch gets to fix it. Sucker....
 //
@@ -135,8 +136,21 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
             Llmcommands::Query(rest) => query(&rest.model, &rest.prompt, ollama_conf).await?,
         },
         Commands::Rag(sc) => match &sc.subcommand {
-            Ragcommands::Upload(rest) => {
-                upload(webui_conf, std::path::Path::new(&rest.file).to_path_buf()).await?
+            Ragcommands::Upload(rest) => upload(webui_conf, &rest.file.clone()).await?,
+            Ragcommands::Create(rest) => {
+                create(
+                    webui_conf,
+                    KnowledgeForm::new(rest.name.clone(), rest.description.clone()),
+                )
+                .await?
+            }
+            Ragcommands::Add(rest) => {
+                add(
+                    webui_conf,
+                    &rest.id,
+                    KnowledgeFileIdForm::new(rest.file_id.clone()),
+                )
+                .await?
             }
         },
     };
@@ -235,14 +249,39 @@ struct RagArgs {
 
 #[derive(Subcommand, Debug)]
 enum Ragcommands {
+    /// Upload a file to the rag vector db
     Upload(UploadArgs),
+    /// Create a knowledge collection
+    Create(CreateKnowledgeArgs),
+    /// Add an already uploaded file to a collection
+    Add(AddKnowledgeArgs),
 }
 
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[command(long_about = None)]
 struct UploadArgs {
     #[arg(short, long)]
     file: String,
     // #[arg(long)]
     // collection: Option<String>,
+}
+
+#[derive(Parser, Debug)]
+#[command(long_about = None)]
+struct CreateKnowledgeArgs {
+    #[arg(short, long)]
+    name: String,
+
+    #[arg(short, long)]
+    description: String,
+}
+
+#[derive(Parser, Debug)]
+#[command(long_about = None)]
+struct AddKnowledgeArgs {
+    #[arg(short, long)]
+    id: String,
+
+    #[arg(short, long)]
+    file_id: String,
 }

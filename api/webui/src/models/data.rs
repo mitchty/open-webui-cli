@@ -12,10 +12,13 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct Data {}
+pub struct Data {
+    #[serde(rename = "content")]
+    pub content: Option<String>,
+}
 
 impl Data {
     pub fn new() -> Data {
-        Data {}
+        Data { content: None }
     }
 }
