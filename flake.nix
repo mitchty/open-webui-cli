@@ -220,13 +220,21 @@
 
               # This spec is invalid? wtf
               ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/webui/openapi.json --generator-name rust --output api/webui --package-name webui --skip-validate-spec
-              (cd api/webui && cargo add reqwest --features stream)
+
+              # Add reqwest feature stream so we can fix the file params that take a PathBuf object
+              # The openapi-generator-cli (actually the java backing it) needs a patch.
+              for api in webui ollama; do
+                (cd api/$api && cargo add reqwest --features stream)
+              done
 
               # I dunno wat the real license should be its generated who cares.
+              # TODO set this to whatever open-webui is to be "safe"
               sed -i -e "s/Unlicense/BlueOak-1.0.0/g" api/*/Cargo.toml
 
               taplo fmt
               cargo fmt
+
+              # cargo fix at some point?
 
               # Patch the incompetently produced openapi code from openapi-generate-cli to actually work
               patch -p1 < ./patches/webui.patch
