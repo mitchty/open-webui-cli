@@ -12,18 +12,15 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct OpenWebuiAppsWebuiRoutersUtilsChatForm {
+pub struct ChatTitleMessagesForm {
     #[serde(rename = "title")]
     pub title: String,
     #[serde(rename = "messages")]
     pub messages: Vec<serde_json::Value>,
 }
 
-impl OpenWebuiAppsWebuiRoutersUtilsChatForm {
-    pub fn new(
-        title: String,
-        messages: Vec<serde_json::Value>,
-    ) -> OpenWebuiAppsWebuiRoutersUtilsChatForm {
-        OpenWebuiAppsWebuiRoutersUtilsChatForm { title, messages }
+impl ChatTitleMessagesForm {
+    pub fn new(title: String, messages: Vec<serde_json::Value>) -> ChatTitleMessagesForm {
+        ChatTitleMessagesForm { title, messages }
     }
 }

@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**text_splitter** | Option<**String**> |  | [optional]
 **chunk_size** | **i32** |  | 
 **chunk_overlap** | **i32** |  | 
 

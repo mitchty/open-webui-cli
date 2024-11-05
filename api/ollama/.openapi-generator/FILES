@@ -12,6 +12,7 @@ docs/GenerateCompletionForm.md
 docs/GenerateEmbedForm.md
 docs/GenerateEmbeddingsForm.md
 docs/HttpValidationError.md
+docs/Input.md
 docs/KeepAlive.md
 docs/ModelNameForm.md
 docs/OllamaConfigForm.md
@@ -33,6 +34,7 @@ src/models/generate_completion_form.rs
 src/models/generate_embed_form.rs
 src/models/generate_embeddings_form.rs
 src/models/http_validation_error.rs
+src/models/input.rs
 src/models/keep_alive.rs
 src/models/mod.rs
 src/models/model_name_form.rs

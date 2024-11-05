@@ -24,6 +24,13 @@ pub struct EmbeddingModelUpdateForm {
     pub embedding_engine: String,
     #[serde(rename = "embedding_model")]
     pub embedding_model: String,
+    #[serde(
+        rename = "embedding_batch_size",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub embedding_batch_size: Option<Option<i32>>,
 }
 
 impl EmbeddingModelUpdateForm {
@@ -32,6 +39,7 @@ impl EmbeddingModelUpdateForm {
             openai_config: None,
             embedding_engine,
             embedding_model,
+            embedding_batch_size: None,
         }
     }
 }

@@ -20,12 +20,12 @@ pub struct TagModel {
     #[serde(rename = "user_id")]
     pub user_id: String,
     #[serde(
-        rename = "data",
+        rename = "meta",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub data: Option<Option<String>>,
+    pub meta: Option<Option<serde_json::Value>>,
 }
 
 impl TagModel {
@@ -34,7 +34,7 @@ impl TagModel {
             id,
             name,
             user_id,
-            data: None,
+            meta: None,
         }
     }
 }

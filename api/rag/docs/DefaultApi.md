@@ -20,7 +20,6 @@ Method | HTTP request | Description
 [**process_youtube_video_process_youtube_post**](DefaultApi.md#process_youtube_video_process_youtube_post) | **POST** /process/youtube | Process Youtube Video
 [**query_collection_handler_query_collection_post**](DefaultApi.md#query_collection_handler_query_collection_post) | **POST** /query/collection | Query Collection Handler
 [**query_doc_handler_query_doc_post**](DefaultApi.md#query_doc_handler_query_doc_post) | **POST** /query/doc | Query Doc Handler
-[**reset_reset_post**](DefaultApi.md#reset_reset_post) | **POST** /reset | Reset
 [**reset_upload_dir_reset_uploads_post**](DefaultApi.md#reset_upload_dir_reset_uploads_post) | **POST** /reset/uploads | Reset Upload Dir
 [**reset_vector_db_reset_db_post**](DefaultApi.md#reset_vector_db_reset_db_post) | **POST** /reset/db | Reset Vector Db
 [**update_embedding_config_embedding_update_post**](DefaultApi.md#update_embedding_config_embedding_update_post) | **POST** /embedding/update | Update Embedding Config
@@ -452,31 +451,6 @@ Name | Type | Description  | Required | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## reset_reset_post
-
-> bool reset_reset_post()
-Reset
-
-### Parameters
-
-This endpoint does not need any parameter.
-
-### Return type
-
-**bool**
-
-### Authorization
-
-[HTTPBearer](../README.md#HTTPBearer)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

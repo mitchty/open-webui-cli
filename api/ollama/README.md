@@ -75,6 +75,7 @@ Class | Method | HTTP request | Description
  - [GenerateEmbedForm](docs/GenerateEmbedForm.md)
  - [GenerateEmbeddingsForm](docs/GenerateEmbeddingsForm.md)
  - [HttpValidationError](docs/HttpValidationError.md)
+ - [Input](docs/Input.md)
  - [KeepAlive](docs/KeepAlive.md)
  - [ModelNameForm](docs/ModelNameForm.md)
  - [OllamaConfigForm](docs/OllamaConfigForm.md)

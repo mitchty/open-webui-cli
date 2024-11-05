@@ -677,6 +677,7 @@ pub async fn generate_chat_completion_api_chat_post(
     configuration: &configuration::Configuration,
     generate_chat_completion_form: models::GenerateChatCompletionForm,
     url_idx: Option<i32>,
+    bypass_filter: Option<bool>,
 ) -> Result<serde_json::Value, Error<GenerateChatCompletionApiChatPostError>> {
     let local_var_configuration = configuration;
 
@@ -689,6 +690,10 @@ pub async fn generate_chat_completion_api_chat_post(
     if let Some(ref local_var_str) = url_idx {
         local_var_req_builder =
             local_var_req_builder.query(&[("url_idx", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_str) = bypass_filter {
+        local_var_req_builder =
+            local_var_req_builder.query(&[("bypass_filter", &local_var_str.to_string())]);
     }
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder =
@@ -723,6 +728,7 @@ pub async fn generate_chat_completion_api_chat_url_idx_post(
     configuration: &configuration::Configuration,
     url_idx: Option<i32>,
     generate_chat_completion_form: models::GenerateChatCompletionForm,
+    bypass_filter: Option<bool>,
 ) -> Result<serde_json::Value, Error<GenerateChatCompletionApiChatUrlIdxPostError>> {
     let local_var_configuration = configuration;
 
@@ -736,6 +742,10 @@ pub async fn generate_chat_completion_api_chat_url_idx_post(
     let mut local_var_req_builder =
         local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
+    if let Some(ref local_var_str) = bypass_filter {
+        local_var_req_builder =
+            local_var_req_builder.query(&[("bypass_filter", &local_var_str.to_string())]);
+    }
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder =
             local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
@@ -1873,8 +1883,8 @@ pub async fn upload_model_models_upload_post(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    let mut local_var_form = reqwest::multipart::Form::new();
-    // TODO: support file upload for 'file' parameter
+    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
+
     local_var_req_builder = local_var_req_builder.multipart(local_var_form);
 
     let local_var_req = local_var_req_builder.build()?;
@@ -1921,8 +1931,8 @@ pub async fn upload_model_models_upload_url_idx_post(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    let mut local_var_form = reqwest::multipart::Form::new();
-    // TODO: support file upload for 'file' parameter
+    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
+
     local_var_req_builder = local_var_req_builder.multipart(local_var_form);
 
     let local_var_req = local_var_req_builder.build()?;

@@ -17,21 +17,10 @@ pub struct OpenAiConfigForm {
     pub url: String,
     #[serde(rename = "key")]
     pub key: String,
-    #[serde(
-        rename = "batch_size",
-        default,
-        with = "::serde_with::rust::double_option",
-        skip_serializing_if = "Option::is_none"
-    )]
-    pub batch_size: Option<Option<i32>>,
 }
 
 impl OpenAiConfigForm {
     pub fn new(url: String, key: String) -> OpenAiConfigForm {
-        OpenAiConfigForm {
-            url,
-            key,
-            batch_size: None,
-        }
+        OpenAiConfigForm { url, key }
     }
 }

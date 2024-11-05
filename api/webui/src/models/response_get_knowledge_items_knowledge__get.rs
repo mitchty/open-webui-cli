@@ -27,6 +27,8 @@ pub struct ResponseGetKnowledgeItemsKnowledgeGet {
     pub created_at: i32,
     #[serde(rename = "updated_at")]
     pub updated_at: i32,
+    #[serde(rename = "files", skip_serializing_if = "Option::is_none")]
+    pub files: Option<Vec<models::KnowledgeResponseFilesInner>>,
 }
 
 impl ResponseGetKnowledgeItemsKnowledgeGet {
@@ -45,6 +47,7 @@ impl ResponseGetKnowledgeItemsKnowledgeGet {
             meta: None,
             created_at,
             updated_at,
+            files: None,
         }
     }
 }

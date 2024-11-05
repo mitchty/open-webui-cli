@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 ## download_chat_as_pdf_utils_pdf_post
 
-> serde_json::Value download_chat_as_pdf_utils_pdf_post(open_webui_apps_webui_routers_utils_chat_form)
+> serde_json::Value download_chat_as_pdf_utils_pdf_post(chat_title_messages_form)
 Download Chat As Pdf
 
 ### Parameters
@@ -23,7 +23,7 @@ Download Chat As Pdf
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**open_webui_apps_webui_routers_utils_chat_form** | [**OpenWebuiAppsWebuiRoutersUtilsChatForm**](OpenWebuiAppsWebuiRoutersUtilsChatForm.md) |  | [required] |
+**chat_title_messages_form** | [**ChatTitleMessagesForm**](ChatTitleMessagesForm.md) |  | [required] |
 
 ### Return type
 

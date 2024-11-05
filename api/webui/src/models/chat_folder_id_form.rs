@@ -12,13 +12,18 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct OpenWebuiAppsWebuiModelsChatsChatForm {
-    #[serde(rename = "chat")]
-    pub chat: serde_json::Value,
+pub struct ChatFolderIdForm {
+    #[serde(
+        rename = "folder_id",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub folder_id: Option<Option<String>>,
 }
 
-impl OpenWebuiAppsWebuiModelsChatsChatForm {
-    pub fn new(chat: serde_json::Value) -> OpenWebuiAppsWebuiModelsChatsChatForm {
-        OpenWebuiAppsWebuiModelsChatsChatForm { chat }
+impl ChatFolderIdForm {
+    pub fn new() -> ChatFolderIdForm {
+        ChatFolderIdForm { folder_id: None }
     }
 }

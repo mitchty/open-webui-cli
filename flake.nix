@@ -37,6 +37,12 @@
 
         src = craneLib.cleanCargoSource ./.;
 
+        sslArgs = {
+          OPENSSL_DIR = "${pkgs.openssl.dev}";
+          OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
+          OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include/";
+        };
+
         # Common arguments can be set here to avoid repeating them later
         commonArgs = {
           inherit src;
@@ -52,10 +58,7 @@
 
           # Additional environment variables can be set directly
           # MY_CUSTOM_VAR = "some value";
-          OPENSSL_DIR = "${pkgs.openssl.dev}";
-          OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
-          OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include/";
-        };
+        } // sslArgs;
 
         craneLibLLvmTools = craneLib.overrideToolchain
           (fenix.packages.${system}.complete.withComponents [
@@ -109,7 +112,7 @@
         });
 
         # Version of open-webui I snagged the api from
-        openwebuiver = "0.3.32";
+        openwebuiver = "0.3.35";
       in
       {
         checks = {
@@ -185,7 +188,7 @@
           default = open-webui-cli;
           release = open-webui-cli-release;
         } // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
-          my-workspace-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (commonArgs // {
+          open-webui-cli-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (commonArgs // {
             inherit cargoArtifacts;
           });
         };
@@ -196,7 +199,7 @@
           };
         };
 
-        devShells.default = craneLib.devShell {
+        devShells.default = craneLib.devShell (sslArgs // {
           # Inherit inputs from checks.
           checks = self.checks.${system};
 
@@ -204,9 +207,9 @@
           # MY_CUSTOM_DEVELOPMENT_VAR = "something else";
 
           # Extra inputs can be added here; cargo and rustc are provided by default.
-          packages = [
-            pkgs.cargo-hakari
-            pkgs.openapi-generator-cli
+          packages = with pkgs; [
+            cargo-hakari
+            openapi-generator-cli
             (pkgs.writeScriptBin "fmtall" ''
               taplo fmt
               cargo fmt
@@ -236,11 +239,17 @@
 
               # cargo fix at some point?
 
-              # Patch the incompetently produced openapi code from openapi-generate-cli to actually work
-              patch -p1 < ./patches/webui.patch
+              # Patch the incompetently produced openapi code from
+              # openapi-generate-cli to actually work, TODO upstream the fixes
+              # to the openapi-generator to be able to use paths properly.
+              for patchit in ollama webui; do
+                patch -p1 < ./patches/$patchit-${openwebuiver}.patch
+              done
 
+              # If theres uncommitted files watever
+              #cargo fix --allow-dirty
             '')
           ];
-        };
+        });
       });
 }

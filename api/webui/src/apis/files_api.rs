@@ -60,6 +60,14 @@ pub enum GetFileDataContentByIdFilesIdDataContentGetError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`get_html_file_content_by_id_files_id_content_html_get`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetHtmlFileContentByIdFilesIdContentHtmlGetError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`list_files_files_get`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -213,8 +221,8 @@ pub async fn get_file_by_id_files_id_get(
 pub async fn get_file_content_by_id_files_id_content_file_name_get(
     configuration: &configuration::Configuration,
     id: &str,
-    file_name: &str,
-) -> Result<models::FileModel, Error<GetFileContentByIdFilesIdContentFileNameGetError>> {
+    file_name: &str, // This isn't used internally but openapi considers it a spec violation not to use a path component
+) -> Result<serde_json::Value, Error<GetFileContentByIdFilesIdContentFileNameGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -258,7 +266,7 @@ pub async fn get_file_content_by_id_files_id_content_file_name_get(
 pub async fn get_file_content_by_id_files_id_content_get(
     configuration: &configuration::Configuration,
     id: &str,
-) -> Result<models::FileModel, Error<GetFileContentByIdFilesIdContentGetError>> {
+) -> Result<serde_json::Value, Error<GetFileContentByIdFilesIdContentGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -343,9 +351,53 @@ pub async fn get_file_data_content_by_id_files_id_data_content_get(
     }
 }
 
+pub async fn get_html_file_content_by_id_files_id_content_html_get(
+    configuration: &configuration::Configuration,
+    id: &str,
+) -> Result<serde_json::Value, Error<GetHtmlFileContentByIdFilesIdContentHtmlGetError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!(
+        "{}/files/{id}/content/html",
+        local_var_configuration.base_path,
+        id = crate::apis::urlencode(id)
+    );
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetHtmlFileContentByIdFilesIdContentHtmlGetError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
 pub async fn list_files_files_get(
     configuration: &configuration::Configuration,
-) -> Result<Vec<models::FileModel>, Error<ListFilesFilesGetError>> {
+) -> Result<Vec<models::FileModelResponse>, Error<ListFilesFilesGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -431,7 +483,7 @@ pub async fn update_file_data_content_by_id_files_id_data_content_update_post(
 pub async fn upload_file_files_post(
     configuration: &configuration::Configuration,
     file: std::path::PathBuf,
-) -> Result<serde_json::Value, Error<UploadFileFilesPostError>> {
+) -> Result<models::FileModelResponse, Error<UploadFileFilesPostError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -447,8 +499,7 @@ pub async fn upload_file_files_post(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-
-    let local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
+    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
 
     local_var_req_builder = local_var_req_builder.multipart(local_var_form);
 

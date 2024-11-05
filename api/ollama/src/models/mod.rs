@@ -14,6 +14,8 @@ pub mod generate_embeddings_form;
 pub use self::generate_embeddings_form::GenerateEmbeddingsForm;
 pub mod http_validation_error;
 pub use self::http_validation_error::HttpValidationError;
+pub mod input;
+pub use self::input::Input;
 pub mod keep_alive;
 pub use self::keep_alive::KeepAlive;
 pub mod model_name_form;

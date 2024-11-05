@@ -71,6 +71,13 @@ pub enum SigninAuthsSigninPostError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`signout_auths_signout_get`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum SignoutAuthsSignoutGetError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`signup_auths_signup_post`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -341,7 +348,7 @@ pub async fn get_api_key_auths_api_key_get(
 
 pub async fn get_session_user_auths_get(
     configuration: &configuration::Configuration,
-) -> Result<models::OpenWebuiAppsWebuiModelsAuthsUserResponse, Error<GetSessionUserAuthsGetError>> {
+) -> Result<models::SessionUserResponse, Error<GetSessionUserAuthsGetError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -381,7 +388,7 @@ pub async fn get_session_user_auths_get(
 pub async fn signin_auths_signin_post(
     configuration: &configuration::Configuration,
     signin_form: models::SigninForm,
-) -> Result<models::SigninResponse, Error<SigninAuthsSigninPostError>> {
+) -> Result<models::SessionUserResponse, Error<SigninAuthsSigninPostError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -416,10 +423,46 @@ pub async fn signin_auths_signin_post(
     }
 }
 
+pub async fn signout_auths_signout_get(
+    configuration: &configuration::Configuration,
+) -> Result<serde_json::Value, Error<SignoutAuthsSignoutGetError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/auths/signout", local_var_configuration.base_path);
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<SignoutAuthsSignoutGetError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
 pub async fn signup_auths_signup_post(
     configuration: &configuration::Configuration,
     signup_form: models::SignupForm,
-) -> Result<models::SigninResponse, Error<SignupAuthsSignupPostError>> {
+) -> Result<models::SessionUserResponse, Error<SignupAuthsSignupPostError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;

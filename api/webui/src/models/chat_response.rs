@@ -34,6 +34,22 @@ pub struct ChatResponse {
     pub share_id: Option<Option<String>>,
     #[serde(rename = "archived")]
     pub archived: bool,
+    #[serde(
+        rename = "pinned",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub pinned: Option<Option<bool>>,
+    #[serde(rename = "meta", skip_serializing_if = "Option::is_none")]
+    pub meta: Option<serde_json::Value>,
+    #[serde(
+        rename = "folder_id",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub folder_id: Option<Option<String>>,
 }
 
 impl ChatResponse {
@@ -55,6 +71,9 @@ impl ChatResponse {
             created_at,
             share_id: None,
             archived,
+            pinned: None,
+            meta: None,
+            folder_id: None,
         }
     }
 }

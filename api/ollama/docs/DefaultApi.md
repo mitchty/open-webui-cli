@@ -278,7 +278,7 @@ Name | Type | Description  | Required | Notes
 
 ## generate_chat_completion_api_chat_post
 
-> serde_json::Value generate_chat_completion_api_chat_post(generate_chat_completion_form, url_idx)
+> serde_json::Value generate_chat_completion_api_chat_post(generate_chat_completion_form, url_idx, bypass_filter)
 Generate Chat Completion
 
 ### Parameters
@@ -288,6 +288,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **generate_chat_completion_form** | [**GenerateChatCompletionForm**](GenerateChatCompletionForm.md) |  | [required] |
 **url_idx** | Option<**i32**> |  |  |
+**bypass_filter** | Option<**bool**> |  |  |
 
 ### Return type
 
@@ -307,7 +308,7 @@ Name | Type | Description  | Required | Notes
 
 ## generate_chat_completion_api_chat_url_idx_post
 
-> serde_json::Value generate_chat_completion_api_chat_url_idx_post(url_idx, generate_chat_completion_form)
+> serde_json::Value generate_chat_completion_api_chat_url_idx_post(url_idx, generate_chat_completion_form, bypass_filter)
 Generate Chat Completion
 
 ### Parameters
@@ -317,6 +318,7 @@ Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **url_idx** | Option<**i32**> |  | [required] |
 **generate_chat_completion_form** | [**GenerateChatCompletionForm**](GenerateChatCompletionForm.md) |  | [required] |
+**bypass_filter** | Option<**bool**> |  |  |
 
 ### Return type
 

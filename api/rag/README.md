@@ -42,7 +42,6 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**process_youtube_video_process_youtube_post**](docs/DefaultApi.md#process_youtube_video_process_youtube_post) | **POST** /process/youtube | Process Youtube Video
 *DefaultApi* | [**query_collection_handler_query_collection_post**](docs/DefaultApi.md#query_collection_handler_query_collection_post) | **POST** /query/collection | Query Collection Handler
 *DefaultApi* | [**query_doc_handler_query_doc_post**](docs/DefaultApi.md#query_doc_handler_query_doc_post) | **POST** /query/doc | Query Doc Handler
-*DefaultApi* | [**reset_reset_post**](docs/DefaultApi.md#reset_reset_post) | **POST** /reset | Reset
 *DefaultApi* | [**reset_upload_dir_reset_uploads_post**](docs/DefaultApi.md#reset_upload_dir_reset_uploads_post) | **POST** /reset/uploads | Reset Upload Dir
 *DefaultApi* | [**reset_vector_db_reset_db_post**](docs/DefaultApi.md#reset_vector_db_reset_db_post) | **POST** /reset/db | Reset Vector Db
 *DefaultApi* | [**update_embedding_config_embedding_update_post**](docs/DefaultApi.md#update_embedding_config_embedding_update_post) | **POST** /embedding/update | Update Embedding Config

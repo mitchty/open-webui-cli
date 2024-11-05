@@ -12,31 +12,39 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct TagNameForm {
-    #[serde(rename = "name")]
-    pub name: String,
+pub struct ChatImportForm {
+    #[serde(rename = "chat")]
+    pub chat: serde_json::Value,
     #[serde(
-        rename = "skip",
+        rename = "meta",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub skip: Option<Option<i32>>,
+    pub meta: Option<Option<serde_json::Value>>,
     #[serde(
-        rename = "limit",
+        rename = "pinned",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
-    pub limit: Option<Option<i32>>,
+    pub pinned: Option<Option<bool>>,
+    #[serde(
+        rename = "folder_id",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub folder_id: Option<Option<String>>,
 }
 
-impl TagNameForm {
-    pub fn new(name: String) -> TagNameForm {
-        TagNameForm {
-            name,
-            skip: None,
-            limit: None,
+impl ChatImportForm {
+    pub fn new(chat: serde_json::Value) -> ChatImportForm {
+        ChatImportForm {
+            chat,
+            meta: None,
+            pinned: None,
+            folder_id: None,
         }
     }
 }

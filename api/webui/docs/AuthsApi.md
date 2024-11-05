@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**get_api_key_auths_api_key_get**](AuthsApi.md#get_api_key_auths_api_key_get) | **GET** /auths/api_key | Get Api Key
 [**get_session_user_auths_get**](AuthsApi.md#get_session_user_auths_get) | **GET** /auths/ | Get Session User
 [**signin_auths_signin_post**](AuthsApi.md#signin_auths_signin_post) | **POST** /auths/signin | Signin
+[**signout_auths_signout_get**](AuthsApi.md#signout_auths_signout_get) | **GET** /auths/signout | Signout
 [**signup_auths_signup_post**](AuthsApi.md#signup_auths_signup_post) | **POST** /auths/signup | Signup
 [**update_admin_config_auths_admin_config_post**](AuthsApi.md#update_admin_config_auths_admin_config_post) | **POST** /auths/admin/config | Update Admin Config
 [**update_password_auths_update_password_post**](AuthsApi.md#update_password_auths_update_password_post) | **POST** /auths/update/password | Update Password
@@ -174,7 +175,7 @@ This endpoint does not need any parameter.
 
 ## get_session_user_auths_get
 
-> models::OpenWebuiAppsWebuiModelsAuthsUserResponse get_session_user_auths_get()
+> models::SessionUserResponse get_session_user_auths_get()
 Get Session User
 
 ### Parameters
@@ -183,7 +184,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**models::OpenWebuiAppsWebuiModelsAuthsUserResponse**](open_webui__apps__webui__models__auths__UserResponse.md)
+[**models::SessionUserResponse**](SessionUserResponse.md)
 
 ### Authorization
 
@@ -199,7 +200,7 @@ This endpoint does not need any parameter.
 
 ## signin_auths_signin_post
 
-> models::SigninResponse signin_auths_signin_post(signin_form)
+> models::SessionUserResponse signin_auths_signin_post(signin_form)
 Signin
 
 ### Parameters
@@ -211,7 +212,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::SigninResponse**](SigninResponse.md)
+[**models::SessionUserResponse**](SessionUserResponse.md)
 
 ### Authorization
 
@@ -225,9 +226,34 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
+## signout_auths_signout_get
+
+> serde_json::Value signout_auths_signout_get()
+Signout
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## signup_auths_signup_post
 
-> models::SigninResponse signup_auths_signup_post(signup_form)
+> models::SessionUserResponse signup_auths_signup_post(signup_form)
 Signup
 
 ### Parameters
@@ -239,7 +265,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::SigninResponse**](SigninResponse.md)
+[**models::SessionUserResponse**](SessionUserResponse.md)
 
 ### Authorization
 

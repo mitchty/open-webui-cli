@@ -37,6 +37,13 @@ pub struct KnowledgeResponse {
     pub created_at: i32,
     #[serde(rename = "updated_at")]
     pub updated_at: i32,
+    #[serde(
+        rename = "files",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub files: Option<Option<Vec<models::KnowledgeResponseFilesInner>>>,
 }
 
 impl KnowledgeResponse {
@@ -55,6 +62,7 @@ impl KnowledgeResponse {
             meta: None,
             created_at,
             updated_at,
+            files: None,
         }
     }
 }

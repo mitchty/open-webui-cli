@@ -61,7 +61,7 @@ pub enum GetHtmlFromMarkdownUtilsMarkdownPostError {
 
 pub async fn download_chat_as_pdf_utils_pdf_post(
     configuration: &configuration::Configuration,
-    open_webui_apps_webui_routers_utils_chat_form: models::OpenWebuiAppsWebuiRoutersUtilsChatForm,
+    chat_title_messages_form: models::ChatTitleMessagesForm,
 ) -> Result<serde_json::Value, Error<DownloadChatAsPdfUtilsPdfPostError>> {
     let local_var_configuration = configuration;
 
@@ -75,8 +75,7 @@ pub async fn download_chat_as_pdf_utils_pdf_post(
         local_var_req_builder =
             local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
     }
-    local_var_req_builder =
-        local_var_req_builder.json(&open_webui_apps_webui_routers_utils_chat_form);
+    local_var_req_builder = local_var_req_builder.json(&chat_title_messages_form);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;

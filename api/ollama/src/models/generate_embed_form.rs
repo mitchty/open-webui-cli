@@ -16,9 +16,14 @@ pub struct GenerateEmbedForm {
     #[serde(rename = "model")]
     pub model: String,
     #[serde(rename = "input")]
-    pub input: String,
-    #[serde(rename = "truncate", deserialize_with = "Option::deserialize")]
-    pub truncate: Option<bool>,
+    pub input: Box<models::Input>,
+    #[serde(
+        rename = "truncate",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub truncate: Option<Option<bool>>,
     #[serde(
         rename = "options",
         default,
@@ -36,11 +41,11 @@ pub struct GenerateEmbedForm {
 }
 
 impl GenerateEmbedForm {
-    pub fn new(model: String, input: String, truncate: Option<bool>) -> GenerateEmbedForm {
+    pub fn new(model: String, input: models::Input) -> GenerateEmbedForm {
         GenerateEmbedForm {
             model,
-            input,
-            truncate,
+            input: Box::new(input),
+            truncate: None,
             options: None,
             keep_alive: None,
         }

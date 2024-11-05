@@ -13,6 +13,13 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ChunkParamUpdateForm {
+    #[serde(
+        rename = "text_splitter",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub text_splitter: Option<Option<String>>,
     #[serde(rename = "chunk_size")]
     pub chunk_size: i32,
     #[serde(rename = "chunk_overlap")]
@@ -22,6 +29,7 @@ pub struct ChunkParamUpdateForm {
 impl ChunkParamUpdateForm {
     pub fn new(chunk_size: i32, chunk_overlap: i32) -> ChunkParamUpdateForm {
         ChunkParamUpdateForm {
+            text_splitter: None,
             chunk_size,
             chunk_overlap,
         }

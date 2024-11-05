@@ -12,15 +12,10 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct ChatIdTagForm {
-    #[serde(rename = "tag_name")]
-    pub tag_name: String,
-    #[serde(rename = "chat_id")]
-    pub chat_id: String,
-}
+pub struct Input {}
 
-impl ChatIdTagForm {
-    pub fn new(tag_name: String, chat_id: String) -> ChatIdTagForm {
-        ChatIdTagForm { tag_name, chat_id }
+impl Input {
+    pub fn new() -> Input {
+        Input {}
     }
 }

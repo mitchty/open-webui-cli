@@ -34,25 +34,28 @@ Class | Method | HTTP request | Description
 *AuthsApi* | [**get_api_key_auths_api_key_get**](docs/AuthsApi.md#get_api_key_auths_api_key_get) | **GET** /auths/api_key | Get Api Key
 *AuthsApi* | [**get_session_user_auths_get**](docs/AuthsApi.md#get_session_user_auths_get) | **GET** /auths/ | Get Session User
 *AuthsApi* | [**signin_auths_signin_post**](docs/AuthsApi.md#signin_auths_signin_post) | **POST** /auths/signin | Signin
+*AuthsApi* | [**signout_auths_signout_get**](docs/AuthsApi.md#signout_auths_signout_get) | **GET** /auths/signout | Signout
 *AuthsApi* | [**signup_auths_signup_post**](docs/AuthsApi.md#signup_auths_signup_post) | **POST** /auths/signup | Signup
 *AuthsApi* | [**update_admin_config_auths_admin_config_post**](docs/AuthsApi.md#update_admin_config_auths_admin_config_post) | **POST** /auths/admin/config | Update Admin Config
 *AuthsApi* | [**update_password_auths_update_password_post**](docs/AuthsApi.md#update_password_auths_update_password_post) | **POST** /auths/update/password | Update Password
 *AuthsApi* | [**update_profile_auths_update_profile_post**](docs/AuthsApi.md#update_profile_auths_update_profile_post) | **POST** /auths/update/profile | Update Profile
-*ChatsApi* | [**add_chat_tag_by_id_chats_id_tags_post**](docs/ChatsApi.md#add_chat_tag_by_id_chats_id_tags_post) | **POST** /chats/{id}/tags | Add Chat Tag By Id
+*ChatsApi* | [**add_tag_by_id_and_tag_name_chats_id_tags_post**](docs/ChatsApi.md#add_tag_by_id_and_tag_name_chats_id_tags_post) | **POST** /chats/{id}/tags | Add Tag By Id And Tag Name
 *ChatsApi* | [**archive_all_chats_chats_archive_all_post**](docs/ChatsApi.md#archive_all_chats_chats_archive_all_post) | **POST** /chats/archive/all | Archive All Chats
-*ChatsApi* | [**archive_chat_by_id_chats_id_archive_get**](docs/ChatsApi.md#archive_chat_by_id_chats_id_archive_get) | **GET** /chats/{id}/archive | Archive Chat By Id
-*ChatsApi* | [**clone_chat_by_id_chats_id_clone_get**](docs/ChatsApi.md#clone_chat_by_id_chats_id_clone_get) | **GET** /chats/{id}/clone | Clone Chat By Id
+*ChatsApi* | [**archive_chat_by_id_chats_id_archive_post**](docs/ChatsApi.md#archive_chat_by_id_chats_id_archive_post) | **POST** /chats/{id}/archive | Archive Chat By Id
+*ChatsApi* | [**clone_chat_by_id_chats_id_clone_post**](docs/ChatsApi.md#clone_chat_by_id_chats_id_clone_post) | **POST** /chats/{id}/clone | Clone Chat By Id
 *ChatsApi* | [**create_new_chat_chats_new_post**](docs/ChatsApi.md#create_new_chat_chats_new_post) | **POST** /chats/new | Create New Chat
-*ChatsApi* | [**delete_all_chat_tags_by_id_chats_id_tags_all_delete**](docs/ChatsApi.md#delete_all_chat_tags_by_id_chats_id_tags_all_delete) | **DELETE** /chats/{id}/tags/all | Delete All Chat Tags By Id
+*ChatsApi* | [**delete_all_tags_by_id_chats_id_tags_all_delete**](docs/ChatsApi.md#delete_all_tags_by_id_chats_id_tags_all_delete) | **DELETE** /chats/{id}/tags/all | Delete All Tags By Id
 *ChatsApi* | [**delete_all_user_chats_chats_delete**](docs/ChatsApi.md#delete_all_user_chats_chats_delete) | **DELETE** /chats/ | Delete All User Chats
 *ChatsApi* | [**delete_chat_by_id_chats_id_delete**](docs/ChatsApi.md#delete_chat_by_id_chats_id_delete) | **DELETE** /chats/{id} | Delete Chat By Id
-*ChatsApi* | [**delete_chat_tag_by_id_chats_id_tags_delete**](docs/ChatsApi.md#delete_chat_tag_by_id_chats_id_tags_delete) | **DELETE** /chats/{id}/tags | Delete Chat Tag By Id
 *ChatsApi* | [**delete_shared_chat_by_id_chats_id_share_delete**](docs/ChatsApi.md#delete_shared_chat_by_id_chats_id_share_delete) | **DELETE** /chats/{id}/share | Delete Shared Chat By Id
-*ChatsApi* | [**get_all_tags_chats_tags_all_get**](docs/ChatsApi.md#get_all_tags_chats_tags_all_get) | **GET** /chats/tags/all | Get All Tags
+*ChatsApi* | [**delete_tag_by_id_and_tag_name_chats_id_tags_delete**](docs/ChatsApi.md#delete_tag_by_id_and_tag_name_chats_id_tags_delete) | **DELETE** /chats/{id}/tags | Delete Tag By Id And Tag Name
 *ChatsApi* | [**get_all_user_chats_in_db_chats_all_db_get**](docs/ChatsApi.md#get_all_user_chats_in_db_chats_all_db_get) | **GET** /chats/all/db | Get All User Chats In Db
+*ChatsApi* | [**get_all_user_tags_chats_all_tags_get**](docs/ChatsApi.md#get_all_user_tags_chats_all_tags_get) | **GET** /chats/all/tags | Get All User Tags
 *ChatsApi* | [**get_archived_session_user_chat_list_chats_archived_get**](docs/ChatsApi.md#get_archived_session_user_chat_list_chats_archived_get) | **GET** /chats/archived | Get Archived Session User Chat List
 *ChatsApi* | [**get_chat_by_id_chats_id_get**](docs/ChatsApi.md#get_chat_by_id_chats_id_get) | **GET** /chats/{id} | Get Chat By Id
 *ChatsApi* | [**get_chat_tags_by_id_chats_id_tags_get**](docs/ChatsApi.md#get_chat_tags_by_id_chats_id_tags_get) | **GET** /chats/{id}/tags | Get Chat Tags By Id
+*ChatsApi* | [**get_chats_by_folder_id_chats_folder_folder_id_get**](docs/ChatsApi.md#get_chats_by_folder_id_chats_folder_folder_id_get) | **GET** /chats/folder/{folder_id} | Get Chats By Folder Id
+*ChatsApi* | [**get_pinned_status_by_id_chats_id_pinned_get**](docs/ChatsApi.md#get_pinned_status_by_id_chats_id_pinned_get) | **GET** /chats/{id}/pinned | Get Pinned Status By Id
 *ChatsApi* | [**get_session_user_chat_list_chats_get**](docs/ChatsApi.md#get_session_user_chat_list_chats_get) | **GET** /chats/ | Get Session User Chat List
 *ChatsApi* | [**get_session_user_chat_list_chats_list_get**](docs/ChatsApi.md#get_session_user_chat_list_chats_list_get) | **GET** /chats/list | Get Session User Chat List
 *ChatsApi* | [**get_shared_chat_by_id_chats_share_share_id_get**](docs/ChatsApi.md#get_shared_chat_by_id_chats_share_share_id_get) | **GET** /chats/share/{share_id} | Get Shared Chat By Id
@@ -60,8 +63,13 @@ Class | Method | HTTP request | Description
 *ChatsApi* | [**get_user_chat_list_by_tag_name_chats_tags_post**](docs/ChatsApi.md#get_user_chat_list_by_tag_name_chats_tags_post) | **POST** /chats/tags | Get User Chat List By Tag Name
 *ChatsApi* | [**get_user_chat_list_by_user_id_chats_list_user_user_id_get**](docs/ChatsApi.md#get_user_chat_list_by_user_id_chats_list_user_user_id_get) | **GET** /chats/list/user/{user_id} | Get User Chat List By User Id
 *ChatsApi* | [**get_user_chats_chats_all_get**](docs/ChatsApi.md#get_user_chats_chats_all_get) | **GET** /chats/all | Get User Chats
+*ChatsApi* | [**get_user_pinned_chats_chats_pinned_get**](docs/ChatsApi.md#get_user_pinned_chats_chats_pinned_get) | **GET** /chats/pinned | Get User Pinned Chats
+*ChatsApi* | [**import_chat_chats_import_post**](docs/ChatsApi.md#import_chat_chats_import_post) | **POST** /chats/import | Import Chat
+*ChatsApi* | [**pin_chat_by_id_chats_id_pin_post**](docs/ChatsApi.md#pin_chat_by_id_chats_id_pin_post) | **POST** /chats/{id}/pin | Pin Chat By Id
+*ChatsApi* | [**search_user_chats_chats_search_get**](docs/ChatsApi.md#search_user_chats_chats_search_get) | **GET** /chats/search | Search User Chats
 *ChatsApi* | [**share_chat_by_id_chats_id_share_post**](docs/ChatsApi.md#share_chat_by_id_chats_id_share_post) | **POST** /chats/{id}/share | Share Chat By Id
 *ChatsApi* | [**update_chat_by_id_chats_id_post**](docs/ChatsApi.md#update_chat_by_id_chats_id_post) | **POST** /chats/{id} | Update Chat By Id
+*ChatsApi* | [**update_chat_folder_id_by_id_chats_id_folder_post**](docs/ChatsApi.md#update_chat_folder_id_by_id_chats_id_folder_post) | **POST** /chats/{id}/folder | Update Chat Folder Id By Id
 *ConfigsApi* | [**export_config_configs_export_get**](docs/ConfigsApi.md#export_config_configs_export_get) | **GET** /configs/export | Export Config
 *ConfigsApi* | [**get_banners_configs_banners_get**](docs/ConfigsApi.md#get_banners_configs_banners_get) | **GET** /configs/banners | Get Banners
 *ConfigsApi* | [**import_config_configs_import_post**](docs/ConfigsApi.md#import_config_configs_import_post) | **POST** /configs/import | Import Config
@@ -69,15 +77,34 @@ Class | Method | HTTP request | Description
 *ConfigsApi* | [**set_global_default_models_configs_default_models_post**](docs/ConfigsApi.md#set_global_default_models_configs_default_models_post) | **POST** /configs/default/models | Set Global Default Models
 *ConfigsApi* | [**set_global_default_suggestions_configs_default_suggestions_post**](docs/ConfigsApi.md#set_global_default_suggestions_configs_default_suggestions_post) | **POST** /configs/default/suggestions | Set Global Default Suggestions
 *DefaultApi* | [**get_status_get**](docs/DefaultApi.md#get_status_get) | **GET** / | Get Status
+*EvaluationsApi* | [**create_feedback_evaluations_feedback_post**](docs/EvaluationsApi.md#create_feedback_evaluations_feedback_post) | **POST** /evaluations/feedback | Create Feedback
+*EvaluationsApi* | [**delete_all_feedbacks_evaluations_feedbacks_all_delete**](docs/EvaluationsApi.md#delete_all_feedbacks_evaluations_feedbacks_all_delete) | **DELETE** /evaluations/feedbacks/all | Delete All Feedbacks
+*EvaluationsApi* | [**delete_feedback_by_id_evaluations_feedback_id_delete**](docs/EvaluationsApi.md#delete_feedback_by_id_evaluations_feedback_id_delete) | **DELETE** /evaluations/feedback/{id} | Delete Feedback By Id
+*EvaluationsApi* | [**delete_feedbacks_evaluations_feedbacks_delete**](docs/EvaluationsApi.md#delete_feedbacks_evaluations_feedbacks_delete) | **DELETE** /evaluations/feedbacks | Delete Feedbacks
+*EvaluationsApi* | [**get_all_feedbacks_evaluations_feedbacks_all_export_get**](docs/EvaluationsApi.md#get_all_feedbacks_evaluations_feedbacks_all_export_get) | **GET** /evaluations/feedbacks/all/export | Get All Feedbacks
+*EvaluationsApi* | [**get_all_feedbacks_evaluations_feedbacks_all_get**](docs/EvaluationsApi.md#get_all_feedbacks_evaluations_feedbacks_all_get) | **GET** /evaluations/feedbacks/all | Get All Feedbacks
+*EvaluationsApi* | [**get_config_evaluations_config_get**](docs/EvaluationsApi.md#get_config_evaluations_config_get) | **GET** /evaluations/config | Get Config
+*EvaluationsApi* | [**get_feedback_by_id_evaluations_feedback_id_get**](docs/EvaluationsApi.md#get_feedback_by_id_evaluations_feedback_id_get) | **GET** /evaluations/feedback/{id} | Get Feedback By Id
+*EvaluationsApi* | [**get_feedbacks_evaluations_feedbacks_user_get**](docs/EvaluationsApi.md#get_feedbacks_evaluations_feedbacks_user_get) | **GET** /evaluations/feedbacks/user | Get Feedbacks
+*EvaluationsApi* | [**update_config_evaluations_config_post**](docs/EvaluationsApi.md#update_config_evaluations_config_post) | **POST** /evaluations/config | Update Config
+*EvaluationsApi* | [**update_feedback_by_id_evaluations_feedback_id_post**](docs/EvaluationsApi.md#update_feedback_by_id_evaluations_feedback_id_post) | **POST** /evaluations/feedback/{id} | Update Feedback By Id
 *FilesApi* | [**delete_all_files_files_all_delete**](docs/FilesApi.md#delete_all_files_files_all_delete) | **DELETE** /files/all | Delete All Files
 *FilesApi* | [**delete_file_by_id_files_id_delete**](docs/FilesApi.md#delete_file_by_id_files_id_delete) | **DELETE** /files/{id} | Delete File By Id
 *FilesApi* | [**get_file_by_id_files_id_get**](docs/FilesApi.md#get_file_by_id_files_id_get) | **GET** /files/{id} | Get File By Id
 *FilesApi* | [**get_file_content_by_id_files_id_content_file_name_get**](docs/FilesApi.md#get_file_content_by_id_files_id_content_file_name_get) | **GET** /files/{id}/content/{file_name} | Get File Content By Id
 *FilesApi* | [**get_file_content_by_id_files_id_content_get**](docs/FilesApi.md#get_file_content_by_id_files_id_content_get) | **GET** /files/{id}/content | Get File Content By Id
 *FilesApi* | [**get_file_data_content_by_id_files_id_data_content_get**](docs/FilesApi.md#get_file_data_content_by_id_files_id_data_content_get) | **GET** /files/{id}/data/content | Get File Data Content By Id
+*FilesApi* | [**get_html_file_content_by_id_files_id_content_html_get**](docs/FilesApi.md#get_html_file_content_by_id_files_id_content_html_get) | **GET** /files/{id}/content/html | Get Html File Content By Id
 *FilesApi* | [**list_files_files_get**](docs/FilesApi.md#list_files_files_get) | **GET** /files/ | List Files
 *FilesApi* | [**update_file_data_content_by_id_files_id_data_content_update_post**](docs/FilesApi.md#update_file_data_content_by_id_files_id_data_content_update_post) | **POST** /files/{id}/data/content/update | Update File Data Content By Id
 *FilesApi* | [**upload_file_files_post**](docs/FilesApi.md#upload_file_files_post) | **POST** /files/ | Upload File
+*FoldersApi* | [**create_folder_folders_post**](docs/FoldersApi.md#create_folder_folders_post) | **POST** /folders/ | Create Folder
+*FoldersApi* | [**delete_folder_by_id_folders_id_delete**](docs/FoldersApi.md#delete_folder_by_id_folders_id_delete) | **DELETE** /folders/{id} | Delete Folder By Id
+*FoldersApi* | [**get_folder_by_id_folders_id_get**](docs/FoldersApi.md#get_folder_by_id_folders_id_get) | **GET** /folders/{id} | Get Folder By Id
+*FoldersApi* | [**get_folders_folders_get**](docs/FoldersApi.md#get_folders_folders_get) | **GET** /folders/ | Get Folders
+*FoldersApi* | [**update_folder_is_expanded_by_id_folders_id_update_expanded_post**](docs/FoldersApi.md#update_folder_is_expanded_by_id_folders_id_update_expanded_post) | **POST** /folders/{id}/update/expanded | Update Folder Is Expanded By Id
+*FoldersApi* | [**update_folder_name_by_id_folders_id_update_post**](docs/FoldersApi.md#update_folder_name_by_id_folders_id_update_post) | **POST** /folders/{id}/update | Update Folder Name By Id
+*FoldersApi* | [**update_folder_parent_id_by_id_folders_id_update_parent_post**](docs/FoldersApi.md#update_folder_parent_id_by_id_folders_id_update_parent_post) | **POST** /folders/{id}/update/parent | Update Folder Parent Id By Id
 *FunctionsApi* | [**create_new_function_functions_create_post**](docs/FunctionsApi.md#create_new_function_functions_create_post) | **POST** /functions/create | Create New Function
 *FunctionsApi* | [**delete_function_by_id_functions_id_id_delete_delete**](docs/FunctionsApi.md#delete_function_by_id_functions_id_id_delete_delete) | **DELETE** /functions/id/{id}/delete | Delete Function By Id
 *FunctionsApi* | [**get_function_by_id_functions_id_id_get**](docs/FunctionsApi.md#get_function_by_id_functions_id_id_get) | **GET** /functions/id/{id} | Get Function By Id
@@ -157,55 +184,85 @@ Class | Method | HTTP request | Description
  - [ApiKey](docs/ApiKey.md)
  - [BannerModel](docs/BannerModel.md)
  - [Capabilities](docs/Capabilities.md)
- - [ChatIdTagForm](docs/ChatIdTagForm.md)
- - [ChatIdTagModel](docs/ChatIdTagModel.md)
+ - [Chat](docs/Chat.md)
+ - [ChatFolderIdForm](docs/ChatFolderIdForm.md)
+ - [ChatForm](docs/ChatForm.md)
+ - [ChatImportForm](docs/ChatImportForm.md)
  - [ChatResponse](docs/ChatResponse.md)
  - [ChatTitleIdResponse](docs/ChatTitleIdResponse.md)
+ - [ChatTitleMessagesForm](docs/ChatTitleMessagesForm.md)
  - [CodeFormatRequest](docs/CodeFormatRequest.md)
+ - [Comment](docs/Comment.md)
  - [ContentForm](docs/ContentForm.md)
+ - [ContentType](docs/ContentType.md)
+ - [Data](docs/Data.md)
  - [Description](docs/Description.md)
+ - [FeedbackForm](docs/FeedbackForm.md)
+ - [FeedbackFormData](docs/FeedbackFormData.md)
+ - [FeedbackFormSnapshot](docs/FeedbackFormSnapshot.md)
+ - [FeedbackModel](docs/FeedbackModel.md)
+ - [FeedbackUserResponse](docs/FeedbackUserResponse.md)
+ - [FileMeta](docs/FileMeta.md)
+ - [FileMetadataResponse](docs/FileMetadataResponse.md)
  - [FileModel](docs/FileModel.md)
+ - [FileModelResponse](docs/FileModelResponse.md)
+ - [FolderForm](docs/FolderForm.md)
+ - [FolderIsExpandedForm](docs/FolderIsExpandedForm.md)
+ - [FolderModel](docs/FolderModel.md)
+ - [FolderParentIdForm](docs/FolderParentIdForm.md)
  - [FunctionForm](docs/FunctionForm.md)
  - [FunctionMeta](docs/FunctionMeta.md)
  - [FunctionModel](docs/FunctionModel.md)
  - [FunctionResponse](docs/FunctionResponse.md)
+ - [Hash](docs/Hash.md)
  - [HttpValidationError](docs/HttpValidationError.md)
  - [ImportConfigForm](docs/ImportConfigForm.md)
  - [KnowledgeFileIdForm](docs/KnowledgeFileIdForm.md)
  - [KnowledgeFilesResponse](docs/KnowledgeFilesResponse.md)
  - [KnowledgeForm](docs/KnowledgeForm.md)
  - [KnowledgeResponse](docs/KnowledgeResponse.md)
+ - [KnowledgeResponseFilesInner](docs/KnowledgeResponseFilesInner.md)
  - [KnowledgeUpdateForm](docs/KnowledgeUpdateForm.md)
  - [MarkdownForm](docs/MarkdownForm.md)
  - [MemoryModel](docs/MemoryModel.md)
  - [MemoryUpdateModel](docs/MemoryUpdateModel.md)
+ - [Meta](docs/Meta.md)
  - [ModelForm](docs/ModelForm.md)
+ - [ModelId](docs/ModelId.md)
  - [ModelMeta](docs/ModelMeta.md)
  - [ModelModel](docs/ModelModel.md)
  - [ModelResponse](docs/ModelResponse.md)
+ - [Name](docs/Name.md)
  - [OpenWebuiAppsWebuiModelsAuthsUserResponse](docs/OpenWebuiAppsWebuiModelsAuthsUserResponse.md)
- - [OpenWebuiAppsWebuiModelsChatsChatForm](docs/OpenWebuiAppsWebuiModelsChatsChatForm.md)
  - [OpenWebuiAppsWebuiRoutersUsersUserResponse](docs/OpenWebuiAppsWebuiRoutersUsersUserResponse.md)
- - [OpenWebuiAppsWebuiRoutersUtilsChatForm](docs/OpenWebuiAppsWebuiRoutersUtilsChatForm.md)
  - [ProfileImageUrl](docs/ProfileImageUrl.md)
  - [PromptForm](docs/PromptForm.md)
  - [PromptModel](docs/PromptModel.md)
  - [PromptSuggestion](docs/PromptSuggestion.md)
  - [QueryMemoryForm](docs/QueryMemoryForm.md)
+ - [Rating](docs/Rating.md)
+ - [RatingData](docs/RatingData.md)
+ - [Reason](docs/Reason.md)
  - [ResponseGetKnowledgeItemsKnowledgeGet](docs/ResponseGetKnowledgeItemsKnowledgeGet.md)
+ - [SessionUserResponse](docs/SessionUserResponse.md)
  - [SetBannersForm](docs/SetBannersForm.md)
  - [SetDefaultModelsForm](docs/SetDefaultModelsForm.md)
  - [SetDefaultSuggestionsForm](docs/SetDefaultSuggestionsForm.md)
+ - [SiblingModelIds](docs/SiblingModelIds.md)
  - [SigninForm](docs/SigninForm.md)
  - [SigninResponse](docs/SigninResponse.md)
  - [SignupForm](docs/SignupForm.md)
+ - [Size](docs/Size.md)
+ - [SnapshotData](docs/SnapshotData.md)
+ - [TagFilterForm](docs/TagFilterForm.md)
+ - [TagForm](docs/TagForm.md)
  - [TagModel](docs/TagModel.md)
- - [TagNameForm](docs/TagNameForm.md)
  - [ToolForm](docs/ToolForm.md)
  - [ToolMeta](docs/ToolMeta.md)
  - [ToolModel](docs/ToolModel.md)
  - [ToolResponse](docs/ToolResponse.md)
  - [Ui](docs/Ui.md)
+ - [UpdateConfigForm](docs/UpdateConfigForm.md)
  - [UpdatePasswordForm](docs/UpdatePasswordForm.md)
  - [UpdateProfileForm](docs/UpdateProfileForm.md)
  - [UserModel](docs/UserModel.md)

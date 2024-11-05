@@ -27,18 +27,30 @@ pub struct FileModel {
     #[serde(rename = "filename")]
     pub filename: String,
     #[serde(
+        rename = "path",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub path: Option<Option<String>>,
+    #[serde(
         rename = "data",
         default,
         with = "::serde_with::rust::double_option",
         skip_serializing_if = "Option::is_none"
     )]
     pub data: Option<Option<serde_json::Value>>,
-    #[serde(rename = "meta")]
-    pub meta: serde_json::Value,
-    #[serde(rename = "created_at")]
-    pub created_at: i32,
-    #[serde(rename = "updated_at")]
-    pub updated_at: i32,
+    #[serde(
+        rename = "meta",
+        default,
+        with = "::serde_with::rust::double_option",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub meta: Option<Option<serde_json::Value>>,
+    #[serde(rename = "created_at", deserialize_with = "Option::deserialize")]
+    pub created_at: Option<i32>,
+    #[serde(rename = "updated_at", deserialize_with = "Option::deserialize")]
+    pub updated_at: Option<i32>,
 }
 
 impl FileModel {
@@ -46,17 +58,17 @@ impl FileModel {
         id: String,
         user_id: String,
         filename: String,
-        meta: serde_json::Value,
-        created_at: i32,
-        updated_at: i32,
+        created_at: Option<i32>,
+        updated_at: Option<i32>,
     ) -> FileModel {
         FileModel {
             id,
             user_id,
             hash: None,
             filename,
+            path: None,
             data: None,
-            meta,
+            meta: None,
             created_at,
             updated_at,
         }

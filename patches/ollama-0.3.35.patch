@@ -1,0 +1,26 @@
+diff --git a/api/ollama/src/apis/default_api.rs b/api/ollama/src/apis/default_api.rs
+index 0972b5b..9efff58 100644
+--- a/api/ollama/src/apis/default_api.rs
++++ b/api/ollama/src/apis/default_api.rs
+@@ -1883,8 +1883,8 @@ pub async fn upload_model_models_upload_post(
+     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+     };
+-    let mut local_var_form = reqwest::multipart::Form::new();
+-    // TODO: support file upload for 'file' parameter
++    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
++
+     local_var_req_builder = local_var_req_builder.multipart(local_var_form);
+ 
+     let local_var_req = local_var_req_builder.build()?;
+@@ -1931,8 +1931,8 @@ pub async fn upload_model_models_upload_url_idx_post(
+     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+     };
+-    let mut local_var_form = reqwest::multipart::Form::new();
+-    // TODO: support file upload for 'file' parameter
++    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
++
+     local_var_req_builder = local_var_req_builder.multipart(local_var_form);
+ 
+     let local_var_req = local_var_req_builder.build()?;

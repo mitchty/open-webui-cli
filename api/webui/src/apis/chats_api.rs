@@ -13,10 +13,10 @@ use crate::{apis::ResponseContent, models};
 use reqwest;
 use serde::{Deserialize, Serialize};
 
-/// struct for typed errors of method [`add_chat_tag_by_id_chats_id_tags_post`]
+/// struct for typed errors of method [`add_tag_by_id_and_tag_name_chats_id_tags_post`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum AddChatTagByIdChatsIdTagsPostError {
+pub enum AddTagByIdAndTagNameChatsIdTagsPostError {
     Status422(models::HttpValidationError),
     UnknownValue(serde_json::Value),
 }
@@ -28,18 +28,18 @@ pub enum ArchiveAllChatsChatsArchiveAllPostError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`archive_chat_by_id_chats_id_archive_get`]
+/// struct for typed errors of method [`archive_chat_by_id_chats_id_archive_post`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ArchiveChatByIdChatsIdArchiveGetError {
+pub enum ArchiveChatByIdChatsIdArchivePostError {
     Status422(models::HttpValidationError),
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`clone_chat_by_id_chats_id_clone_get`]
+/// struct for typed errors of method [`clone_chat_by_id_chats_id_clone_post`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum CloneChatByIdChatsIdCloneGetError {
+pub enum CloneChatByIdChatsIdClonePostError {
     Status422(models::HttpValidationError),
     UnknownValue(serde_json::Value),
 }
@@ -52,10 +52,10 @@ pub enum CreateNewChatChatsNewPostError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`delete_all_chat_tags_by_id_chats_id_tags_all_delete`]
+/// struct for typed errors of method [`delete_all_tags_by_id_chats_id_tags_all_delete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum DeleteAllChatTagsByIdChatsIdTagsAllDeleteError {
+pub enum DeleteAllTagsByIdChatsIdTagsAllDeleteError {
     Status422(models::HttpValidationError),
     UnknownValue(serde_json::Value),
 }
@@ -75,14 +75,6 @@ pub enum DeleteChatByIdChatsIdDeleteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`delete_chat_tag_by_id_chats_id_tags_delete`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum DeleteChatTagByIdChatsIdTagsDeleteError {
-    Status422(models::HttpValidationError),
-    UnknownValue(serde_json::Value),
-}
-
 /// struct for typed errors of method [`delete_shared_chat_by_id_chats_id_share_delete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -91,10 +83,11 @@ pub enum DeleteSharedChatByIdChatsIdShareDeleteError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`get_all_tags_chats_tags_all_get`]
+/// struct for typed errors of method [`delete_tag_by_id_and_tag_name_chats_id_tags_delete`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GetAllTagsChatsTagsAllGetError {
+pub enum DeleteTagByIdAndTagNameChatsIdTagsDeleteError {
+    Status422(models::HttpValidationError),
     UnknownValue(serde_json::Value),
 }
 
@@ -102,6 +95,13 @@ pub enum GetAllTagsChatsTagsAllGetError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetAllUserChatsInDbChatsAllDbGetError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_all_user_tags_chats_all_tags_get`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetAllUserTagsChatsAllTagsGetError {
     UnknownValue(serde_json::Value),
 }
 
@@ -125,6 +125,22 @@ pub enum GetChatByIdChatsIdGetError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetChatTagsByIdChatsIdTagsGetError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_chats_by_folder_id_chats_folder_folder_id_get`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetChatsByFolderIdChatsFolderFolderIdGetError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`get_pinned_status_by_id_chats_id_pinned_get`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetPinnedStatusByIdChatsIdPinnedGetError {
     Status422(models::HttpValidationError),
     UnknownValue(serde_json::Value),
 }
@@ -183,6 +199,37 @@ pub enum GetUserChatsChatsAllGetError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`get_user_pinned_chats_chats_pinned_get`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum GetUserPinnedChatsChatsPinnedGetError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`import_chat_chats_import_post`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ImportChatChatsImportPostError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`pin_chat_by_id_chats_id_pin_post`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PinChatByIdChatsIdPinPostError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`search_user_chats_chats_search_get`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum SearchUserChatsChatsSearchGetError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`share_chat_by_id_chats_id_share_post`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -199,11 +246,19 @@ pub enum UpdateChatByIdChatsIdPostError {
     UnknownValue(serde_json::Value),
 }
 
-pub async fn add_chat_tag_by_id_chats_id_tags_post(
+/// struct for typed errors of method [`update_chat_folder_id_by_id_chats_id_folder_post`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateChatFolderIdByIdChatsIdFolderPostError {
+    Status422(models::HttpValidationError),
+    UnknownValue(serde_json::Value),
+}
+
+pub async fn add_tag_by_id_and_tag_name_chats_id_tags_post(
     configuration: &configuration::Configuration,
     id: &str,
-    chat_id_tag_form: models::ChatIdTagForm,
-) -> Result<models::ChatIdTagModel, Error<AddChatTagByIdChatsIdTagsPostError>> {
+    tag_form: models::TagForm,
+) -> Result<Vec<models::TagModel>, Error<AddTagByIdAndTagNameChatsIdTagsPostError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -223,7 +278,7 @@ pub async fn add_chat_tag_by_id_chats_id_tags_post(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&chat_id_tag_form);
+    local_var_req_builder = local_var_req_builder.json(&tag_form);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -234,7 +289,7 @@ pub async fn add_chat_tag_by_id_chats_id_tags_post(
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<AddChatTagByIdChatsIdTagsPostError> =
+        let local_var_entity: Option<AddTagByIdAndTagNameChatsIdTagsPostError> =
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,
@@ -284,10 +339,10 @@ pub async fn archive_all_chats_chats_archive_all_post(
     }
 }
 
-pub async fn archive_chat_by_id_chats_id_archive_get(
+pub async fn archive_chat_by_id_chats_id_archive_post(
     configuration: &configuration::Configuration,
     id: &str,
-) -> Result<models::ChatResponse, Error<ArchiveChatByIdChatsIdArchiveGetError>> {
+) -> Result<models::ChatResponse, Error<ArchiveChatByIdChatsIdArchivePostError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -298,7 +353,7 @@ pub async fn archive_chat_by_id_chats_id_archive_get(
         id = crate::apis::urlencode(id)
     );
     let mut local_var_req_builder =
-        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+        local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder =
@@ -317,7 +372,7 @@ pub async fn archive_chat_by_id_chats_id_archive_get(
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<ArchiveChatByIdChatsIdArchiveGetError> =
+        let local_var_entity: Option<ArchiveChatByIdChatsIdArchivePostError> =
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,
@@ -328,10 +383,10 @@ pub async fn archive_chat_by_id_chats_id_archive_get(
     }
 }
 
-pub async fn clone_chat_by_id_chats_id_clone_get(
+pub async fn clone_chat_by_id_chats_id_clone_post(
     configuration: &configuration::Configuration,
     id: &str,
-) -> Result<models::ChatResponse, Error<CloneChatByIdChatsIdCloneGetError>> {
+) -> Result<models::ChatResponse, Error<CloneChatByIdChatsIdClonePostError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -342,7 +397,7 @@ pub async fn clone_chat_by_id_chats_id_clone_get(
         id = crate::apis::urlencode(id)
     );
     let mut local_var_req_builder =
-        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+        local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder =
@@ -361,7 +416,7 @@ pub async fn clone_chat_by_id_chats_id_clone_get(
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<CloneChatByIdChatsIdCloneGetError> =
+        let local_var_entity: Option<CloneChatByIdChatsIdClonePostError> =
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,
@@ -374,7 +429,7 @@ pub async fn clone_chat_by_id_chats_id_clone_get(
 
 pub async fn create_new_chat_chats_new_post(
     configuration: &configuration::Configuration,
-    open_webui_apps_webui_models_chats_chat_form: models::OpenWebuiAppsWebuiModelsChatsChatForm,
+    chat_form: models::ChatForm,
 ) -> Result<models::ChatResponse, Error<CreateNewChatChatsNewPostError>> {
     let local_var_configuration = configuration;
 
@@ -391,8 +446,7 @@ pub async fn create_new_chat_chats_new_post(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder =
-        local_var_req_builder.json(&open_webui_apps_webui_models_chats_chat_form);
+    local_var_req_builder = local_var_req_builder.json(&chat_form);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -414,10 +468,10 @@ pub async fn create_new_chat_chats_new_post(
     }
 }
 
-pub async fn delete_all_chat_tags_by_id_chats_id_tags_all_delete(
+pub async fn delete_all_tags_by_id_chats_id_tags_all_delete(
     configuration: &configuration::Configuration,
     id: &str,
-) -> Result<bool, Error<DeleteAllChatTagsByIdChatsIdTagsAllDeleteError>> {
+) -> Result<bool, Error<DeleteAllTagsByIdChatsIdTagsAllDeleteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -447,7 +501,7 @@ pub async fn delete_all_chat_tags_by_id_chats_id_tags_all_delete(
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<DeleteAllChatTagsByIdChatsIdTagsAllDeleteError> =
+        let local_var_entity: Option<DeleteAllTagsByIdChatsIdTagsAllDeleteError> =
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,
@@ -541,52 +595,6 @@ pub async fn delete_chat_by_id_chats_id_delete(
     }
 }
 
-pub async fn delete_chat_tag_by_id_chats_id_tags_delete(
-    configuration: &configuration::Configuration,
-    id: &str,
-    chat_id_tag_form: models::ChatIdTagForm,
-) -> Result<bool, Error<DeleteChatTagByIdChatsIdTagsDeleteError>> {
-    let local_var_configuration = configuration;
-
-    let local_var_client = &local_var_configuration.client;
-
-    let local_var_uri_str = format!(
-        "{}/chats/{id}/tags",
-        local_var_configuration.base_path,
-        id = crate::apis::urlencode(id)
-    );
-    let mut local_var_req_builder =
-        local_var_client.request(reqwest::Method::DELETE, local_var_uri_str.as_str());
-
-    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-        local_var_req_builder =
-            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-    }
-    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
-        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
-    };
-    local_var_req_builder = local_var_req_builder.json(&chat_id_tag_form);
-
-    let local_var_req = local_var_req_builder.build()?;
-    let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-    let local_var_status = local_var_resp.status();
-    let local_var_content = local_var_resp.text().await?;
-
-    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
-    } else {
-        let local_var_entity: Option<DeleteChatTagByIdChatsIdTagsDeleteError> =
-            serde_json::from_str(&local_var_content).ok();
-        let local_var_error = ResponseContent {
-            status: local_var_status,
-            content: local_var_content,
-            entity: local_var_entity,
-        };
-        Err(Error::ResponseError(local_var_error))
-    }
-}
-
 pub async fn delete_shared_chat_by_id_chats_id_share_delete(
     configuration: &configuration::Configuration,
     id: &str,
@@ -631,16 +639,22 @@ pub async fn delete_shared_chat_by_id_chats_id_share_delete(
     }
 }
 
-pub async fn get_all_tags_chats_tags_all_get(
+pub async fn delete_tag_by_id_and_tag_name_chats_id_tags_delete(
     configuration: &configuration::Configuration,
-) -> Result<Vec<models::TagModel>, Error<GetAllTagsChatsTagsAllGetError>> {
+    id: &str,
+    tag_form: models::TagForm,
+) -> Result<Vec<models::TagModel>, Error<DeleteTagByIdAndTagNameChatsIdTagsDeleteError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
 
-    let local_var_uri_str = format!("{}/chats/tags/all", local_var_configuration.base_path);
+    let local_var_uri_str = format!(
+        "{}/chats/{id}/tags",
+        local_var_configuration.base_path,
+        id = crate::apis::urlencode(id)
+    );
     let mut local_var_req_builder =
-        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+        local_var_client.request(reqwest::Method::DELETE, local_var_uri_str.as_str());
 
     if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
         local_var_req_builder =
@@ -649,6 +663,7 @@ pub async fn get_all_tags_chats_tags_all_get(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
+    local_var_req_builder = local_var_req_builder.json(&tag_form);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -659,7 +674,7 @@ pub async fn get_all_tags_chats_tags_all_get(
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
-        let local_var_entity: Option<GetAllTagsChatsTagsAllGetError> =
+        let local_var_entity: Option<DeleteTagByIdAndTagNameChatsIdTagsDeleteError> =
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,
@@ -699,6 +714,45 @@ pub async fn get_all_user_chats_in_db_chats_all_db_get(
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetAllUserChatsInDbChatsAllDbGetError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn get_all_user_tags_chats_all_tags_get(
+    configuration: &configuration::Configuration,
+) -> Result<Vec<models::TagModel>, Error<GetAllUserTagsChatsAllTagsGetError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/chats/all/tags", local_var_configuration.base_path);
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetAllUserTagsChatsAllTagsGetError> =
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,
@@ -839,6 +893,94 @@ pub async fn get_chat_tags_by_id_chats_id_tags_get(
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<GetChatTagsByIdChatsIdTagsGetError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn get_chats_by_folder_id_chats_folder_folder_id_get(
+    configuration: &configuration::Configuration,
+    folder_id: &str,
+) -> Result<Vec<models::ChatResponse>, Error<GetChatsByFolderIdChatsFolderFolderIdGetError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!(
+        "{}/chats/folder/{folder_id}",
+        local_var_configuration.base_path,
+        folder_id = crate::apis::urlencode(folder_id)
+    );
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetChatsByFolderIdChatsFolderFolderIdGetError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn get_pinned_status_by_id_chats_id_pinned_get(
+    configuration: &configuration::Configuration,
+    id: &str,
+) -> Result<bool, Error<GetPinnedStatusByIdChatsIdPinnedGetError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!(
+        "{}/chats/{id}/pinned",
+        local_var_configuration.base_path,
+        id = crate::apis::urlencode(id)
+    );
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetPinnedStatusByIdChatsIdPinnedGetError> =
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,
@@ -1022,7 +1164,7 @@ pub async fn get_user_archived_chats_chats_all_archived_get(
 
 pub async fn get_user_chat_list_by_tag_name_chats_tags_post(
     configuration: &configuration::Configuration,
-    tag_name_form: models::TagNameForm,
+    tag_filter_form: models::TagFilterForm,
 ) -> Result<Vec<models::ChatTitleIdResponse>, Error<GetUserChatListByTagNameChatsTagsPostError>> {
     let local_var_configuration = configuration;
 
@@ -1039,7 +1181,7 @@ pub async fn get_user_chat_list_by_tag_name_chats_tags_post(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder = local_var_req_builder.json(&tag_name_form);
+    local_var_req_builder = local_var_req_builder.json(&tag_filter_form);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -1157,6 +1299,176 @@ pub async fn get_user_chats_chats_all_get(
     }
 }
 
+pub async fn get_user_pinned_chats_chats_pinned_get(
+    configuration: &configuration::Configuration,
+) -> Result<Vec<models::ChatResponse>, Error<GetUserPinnedChatsChatsPinnedGetError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/chats/pinned", local_var_configuration.base_path);
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<GetUserPinnedChatsChatsPinnedGetError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn import_chat_chats_import_post(
+    configuration: &configuration::Configuration,
+    chat_import_form: models::ChatImportForm,
+) -> Result<models::ChatResponse, Error<ImportChatChatsImportPostError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/chats/import", local_var_configuration.base_path);
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+    local_var_req_builder = local_var_req_builder.json(&chat_import_form);
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<ImportChatChatsImportPostError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn pin_chat_by_id_chats_id_pin_post(
+    configuration: &configuration::Configuration,
+    id: &str,
+) -> Result<models::ChatResponse, Error<PinChatByIdChatsIdPinPostError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!(
+        "{}/chats/{id}/pin",
+        local_var_configuration.base_path,
+        id = crate::apis::urlencode(id)
+    );
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<PinChatByIdChatsIdPinPostError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn search_user_chats_chats_search_get(
+    configuration: &configuration::Configuration,
+    text: &str,
+    page: Option<i32>,
+) -> Result<Vec<models::ChatTitleIdResponse>, Error<SearchUserChatsChatsSearchGetError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!("{}/chats/search", local_var_configuration.base_path);
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::GET, local_var_uri_str.as_str());
+
+    local_var_req_builder = local_var_req_builder.query(&[("text", &text.to_string())]);
+    if let Some(ref local_var_str) = page {
+        local_var_req_builder =
+            local_var_req_builder.query(&[("page", &local_var_str.to_string())]);
+    }
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<SearchUserChatsChatsSearchGetError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
 pub async fn share_chat_by_id_chats_id_share_post(
     configuration: &configuration::Configuration,
     id: &str,
@@ -1204,7 +1516,7 @@ pub async fn share_chat_by_id_chats_id_share_post(
 pub async fn update_chat_by_id_chats_id_post(
     configuration: &configuration::Configuration,
     id: &str,
-    open_webui_apps_webui_models_chats_chat_form: models::OpenWebuiAppsWebuiModelsChatsChatForm,
+    chat_form: models::ChatForm,
 ) -> Result<models::ChatResponse, Error<UpdateChatByIdChatsIdPostError>> {
     let local_var_configuration = configuration;
 
@@ -1225,8 +1537,7 @@ pub async fn update_chat_by_id_chats_id_post(
     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
     };
-    local_var_req_builder =
-        local_var_req_builder.json(&open_webui_apps_webui_models_chats_chat_form);
+    local_var_req_builder = local_var_req_builder.json(&chat_form);
 
     let local_var_req = local_var_req_builder.build()?;
     let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -1238,6 +1549,52 @@ pub async fn update_chat_by_id_chats_id_post(
         serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<UpdateChatByIdChatsIdPostError> =
+            serde_json::from_str(&local_var_content).ok();
+        let local_var_error = ResponseContent {
+            status: local_var_status,
+            content: local_var_content,
+            entity: local_var_entity,
+        };
+        Err(Error::ResponseError(local_var_error))
+    }
+}
+
+pub async fn update_chat_folder_id_by_id_chats_id_folder_post(
+    configuration: &configuration::Configuration,
+    id: &str,
+    chat_folder_id_form: models::ChatFolderIdForm,
+) -> Result<models::ChatResponse, Error<UpdateChatFolderIdByIdChatsIdFolderPostError>> {
+    let local_var_configuration = configuration;
+
+    let local_var_client = &local_var_configuration.client;
+
+    let local_var_uri_str = format!(
+        "{}/chats/{id}/folder",
+        local_var_configuration.base_path,
+        id = crate::apis::urlencode(id)
+    );
+    let mut local_var_req_builder =
+        local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+    if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+        local_var_req_builder =
+            local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+    }
+    if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+        local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+    };
+    local_var_req_builder = local_var_req_builder.json(&chat_folder_id_form);
+
+    let local_var_req = local_var_req_builder.build()?;
+    let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+    let local_var_status = local_var_resp.status();
+    let local_var_content = local_var_resp.text().await?;
+
+    if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+        serde_json::from_str(&local_var_content).map_err(Error::from)
+    } else {
+        let local_var_entity: Option<UpdateChatFolderIdByIdChatsIdFolderPostError> =
             serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent {
             status: local_var_status,

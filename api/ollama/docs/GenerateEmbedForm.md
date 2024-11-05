@@ -5,8 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **model** | **String** |  | 
-**input** | **String** |  | 
-**truncate** | Option<**bool**> |  | 
+**input** | [**models::Input**](Input.md) |  | 
+**truncate** | Option<**bool**> |  | [optional]
 **options** | Option<[**serde_json::Value**](.md)> |  | [optional]
 **keep_alive** | Option<[**models::KeepAlive**](Keep_Alive.md)> |  | [optional]
 
