@@ -291,6 +291,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "default"
+version = "0.1.0"
+dependencies = [
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_repr",
+ "url",
+ "uuid",
+]
+
+[[package]]
 name = "deranged"
 version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -974,11 +986,13 @@ dependencies = [
  "anyhow",
  "clap",
  "common",
+ "default",
  "hakari",
  "ollama",
  "rag",
  "serde",
  "serde_json",
+ "serde_with",
  "tokio",
  "webui",
 ]

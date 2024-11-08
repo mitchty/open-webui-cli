@@ -1,11 +1,18 @@
+use std::collections::HashMap;
 use std::error::Error;
 
 use serde::{Deserialize, Serialize};
+use serde_with::serde_as;
 
 use ollama::{
-    apis::default_api::{generate_completion_api_generate_post, get_openai_models_v1_models_get},
+    apis::default_api::{
+        generate_completion_api_generate_post,
+        generate_openai_chat_completion_v1_chat_completions_post, get_openai_models_v1_models_get,
+    },
     models::GenerateCompletionForm,
 };
+
+use default::apis::default_api::generate_chat_completions_api_chat_completions_post;
 
 use super::cli::LazyError;
 
@@ -41,6 +48,113 @@ pub async fn list(conf: ollama::apis::configuration::Configuration) -> Result<()
     Ok(())
 }
 
+// enum ChatMessageRole {
+//     User,
+// }
+
+// enum ChatFileType {
+//     Collection,
+//     File,
+// }
+
+// #[derive(Debug, Serialize, Deserialize)]
+// struct ChatCompletionData {
+//     model: String,
+//     messages: Vec<HashMap<String, String>>,
+//     files: Vec<HashMap<String, String>>,
+// }
+
+#[serde_as]
+#[derive(Serialize, Deserialize, Debug)]
+struct ChatCompletionData {
+    model: String,
+    messages: Vec<ChatMessage>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    files: Option<Vec<ChatFile>>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct ChatMessage {
+    role: String,
+    content: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct ChatFile {
+    #[serde(rename = "type")]
+    ftype: String,
+    id: String,
+}
+
+// Why there are two different chat apis is beyond me
+pub async fn chat(
+    model: &str,
+    prompt: &str,
+    collection: Option<String>, // TODO vec of collections at some point
+    files: Option<String>,
+    conf: default::apis::configuration::Configuration,
+) -> Result<(), Box<dyn Error>> {
+    // for the future
+    let mut messages = Vec::new();
+    messages.push(ChatMessage {
+        role: "user".to_string(),
+        content: prompt.to_string(),
+    });
+
+    let mut outfiles = Vec::new();
+
+    let mut cols = None;
+
+    if let Some(c) = collection {
+        outfiles.push(ChatFile {
+            ftype: "collection".to_string(),
+            id: c.clone(),
+        });
+    }
+
+    if let Some(f) = files {
+        outfiles.push(ChatFile {
+            ftype: "file".to_string(),
+            id: f.clone(),
+        });
+    }
+
+    if outfiles.len() > 0 {
+        cols = Some(outfiles);
+    }
+
+    let body = ChatCompletionData {
+        model: model.to_string(),
+        messages: messages,
+        files: cols,
+    };
+
+    let http_body = serde_json::to_value(&body)?;
+
+    let query = generate_chat_completions_api_chat_completions_post(&conf, http_body, None).await?;
+    let reply: ChatData = serde_json::from_value(query.clone())?;
+
+    for t in reply.choices.iter() {
+        println!("{}", t.message.content);
+    }
+    Ok(())
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct ChatData {
+    choices: Vec<ChatMessageData>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct ChatMessageData {
+    message: ChatMessageContentData,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct ChatMessageContentData {
+    content: String,
+}
+
 // TODO should be split apart from this chungus file
 pub async fn query(
     model: &str,
@@ -53,15 +167,9 @@ pub async fn query(
         stream: Some(Some(false)),
         ..GenerateCompletionForm::default()
     };
-    let query = generate_completion_api_generate_post(&conf, form, None).await;
-    if let Ok(query) = query {
-        let reply: PromptData = serde_json::from_value(query.clone())?;
-        println!("{}", &reply.response);
-    } else {
-        return Err(Box::new(LazyError::new(&format!(
-            "prompt failed: {:?}",
-            query
-        ))));
-    }
+    let query = generate_completion_api_generate_post(&conf, form, None).await?;
+    let reply: PromptData = serde_json::from_value(query.clone())?;
+    println!("{}", &reply.response);
+
     Ok(())
 }

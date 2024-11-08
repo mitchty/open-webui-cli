@@ -8,7 +8,7 @@ index 0972b5b..9efff58 100644
      };
 -    let mut local_var_form = reqwest::multipart::Form::new();
 -    // TODO: support file upload for 'file' parameter
-+    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
++    let local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
 +
      local_var_req_builder = local_var_req_builder.multipart(local_var_form);
  
@@ -19,7 +19,7 @@ index 0972b5b..9efff58 100644
      };
 -    let mut local_var_form = reqwest::multipart::Form::new();
 -    // TODO: support file upload for 'file' parameter
-+    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
++    let local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
 +
      local_var_req_builder = local_var_req_builder.multipart(local_var_form);
  

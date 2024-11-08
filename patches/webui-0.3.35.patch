@@ -16,8 +16,72 @@ index 6c609f9..9dcb41b 100644
      };
 -    let mut local_var_form = reqwest::multipart::Form::new();
 -    // TODO: support file upload for 'file' parameter
-+    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
++    let local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
 +
      local_var_req_builder = local_var_req_builder.multipart(local_var_form);
  
      let local_var_req = local_var_req_builder.build()?;
+diff --git b/api/webui/src/models/data.rs a/api/webui/src/models/data.rs
+index e627a12..9b82733 100644
+--- b/api/webui/src/models/data.rs
++++ a/api/webui/src/models/data.rs
+@@ -12,10 +12,13 @@ use crate::models;
+ use serde::{Deserialize, Serialize};
+ 
+ #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+-pub struct Data {}
++pub struct Data {
++    #[serde(rename = "content")]
++    pub content: Option<String>,
++}
+ 
+ impl Data {
+     pub fn new() -> Data {
+-        Data {}
++        Data { content: None }
+     }
+ }
+diff --git b/api/webui/src/models/file_meta.rs a/api/webui/src/models/file_meta.rs
+index 77b6375..72d5105 100644
+--- b/api/webui/src/models/file_meta.rs
++++ a/api/webui/src/models/file_meta.rs
+@@ -14,11 +14,11 @@ use serde::{Deserialize, Serialize};
+ #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+ pub struct FileMeta {
+     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+-    pub name: Option<Box<models::Name>>,
++    pub name: Option<String>,
+     #[serde(rename = "content_type", skip_serializing_if = "Option::is_none")]
+-    pub content_type: Option<Box<models::ContentType>>,
++    pub content_type: Option<String>,
+     #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
+-    pub size: Option<Box<models::Size>>,
++    pub size: Option<u32>,
+ }
+ 
+ impl FileMeta {
+diff --git b/api/webui/src/models/file_model_response.rs a/api/webui/src/models/file_model_response.rs
+index d034c2c..b4deecd 100644
+--- b/api/webui/src/models/file_model_response.rs
++++ a/api/webui/src/models/file_model_response.rs
+@@ -18,11 +18,9 @@ pub struct FileModelResponse {
+     #[serde(rename = "user_id")]
+     pub user_id: String,
+     #[serde(rename = "hash", skip_serializing_if = "Option::is_none")]
+-    pub hash: Option<Box<models::Hash>>,
++    pub hash: Option<String>,
+     #[serde(rename = "filename")]
+     pub filename: String,
+-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
+-    pub data: Option<Box<models::Data>>,
+     #[serde(rename = "meta")]
+     pub meta: models::FileMeta,
+     #[serde(rename = "created_at")]
+@@ -45,7 +43,6 @@ impl FileModelResponse {
+             user_id,
+             hash: None,
+             filename,
+-            data: None,
+             meta,
+             created_at,
+             updated_at,

@@ -8,7 +8,7 @@ export _base _dir
 set "${SETOPTS:--eu}"
 
 # Version of open-webui we are connecting to, TODO snag this dynamically?
-VERSION="${VERSION:-0.3.32}"
+VERSION="${VERSION:-0.3.35}"
 HOST="${HOST?You need to set HOST to an open-webui system, no auth for now}"
 install -dm755 openapi
 
@@ -32,3 +32,8 @@ curl -s "${HOST}/retrieval/api/v1/openapi.json" -o - | jq > "${ragdir}/openapi.j
 webuidir="${destver}/webui"
 install -dm755 "${webuidir}"
 curl -s "${HOST}/api/v1/openapi.json" -o - | jq > "${webuidir}/openapi.json"
+
+# default api? no idea what to call this
+defdir="${destver}/default"
+install -dm755 "${defdir}"
+curl -s "${HOST}/openapi.json" -o - | jq > "${defdir}/openapi.json"

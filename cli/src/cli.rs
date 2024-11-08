@@ -74,6 +74,15 @@ fn webui_conf(uri: &str, port: &str, token: &str) -> webui::apis::configuration:
     }
 }
 
+fn default_conf(uri: &str, port: &str, token: &str) -> default::apis::configuration::Configuration {
+    default::apis::configuration::Configuration {
+        base_path: format!("http://{}:{}", uri, port), // base_path is http://localhost here... sigh consistency is for the birds apparently
+        bearer_access_token: Some(token.to_string()),
+        user_agent: Some("open-webui-cli/rust".to_owned()),
+        ..default::apis::configuration::Configuration::default()
+    }
+}
+
 fn ollama_conf(uri: &str, port: &str, token: &str) -> ollama::apis::configuration::Configuration {
     let def_conf = ollama::apis::configuration::Configuration::default();
 
@@ -94,11 +103,7 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let api_token = get_val("TOKEN", cli.token, None);
     let api_uri = get_val("URI", cli.uri, Some("localhost".to_string()));
-    let api_port = get_val(
-        "PORT",
-        Some(format!("{}", cli.port.unwrap_or_else(|| 8080))),
-        Some("8080".to_string()),
-    ); // bit redundant but eh
+    let api_port = get_val("PORT", cli.port, Some("8080".to_string())); // bit redundant but eh
 
     // TODO better error handling...
     if api_token.is_none() {
@@ -129,11 +134,26 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
         &api_port.clone().unwrap(),
         &api_token.clone().unwrap(),
     );
+    let default_conf = default_conf(
+        &api_uri.clone().unwrap(),
+        &api_port.clone().unwrap(),
+        &api_token.clone().unwrap(),
+    );
 
     match &cli.command {
         Commands::Llm(sc) => match &sc.subcommand {
             Llmcommands::List => list(ollama_conf).await?,
             Llmcommands::Query(rest) => query(&rest.model, &rest.prompt, ollama_conf).await?,
+            Llmcommands::Chat(rest) => {
+                chat(
+                    &rest.model,
+                    &rest.prompt,
+                    rest.collection.clone(),
+                    rest.file.clone(),
+                    default_conf,
+                )
+                .await?
+            }
         },
         Commands::Rag(sc) => match &sc.subcommand {
             Ragcommands::Upload(rest) => upload(webui_conf, &rest.file.clone()).await?,
@@ -151,6 +171,12 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
                     KnowledgeFileIdForm::new(rest.file_id.clone()),
                 )
                 .await?
+            }
+            Ragcommands::List(_none) => {
+                listfiles(webui_conf).await?;
+            }
+            Ragcommands::Delete(rest) => {
+                deletefile(&rest.id, webui_conf).await?;
             }
         },
     };
@@ -198,8 +224,12 @@ struct LlmArgs {
 
 #[derive(Subcommand, Debug)]
 enum Llmcommands {
+    /// List installed llm models
     List,
+    /// Query llm
     Query(QueryArgs),
+    /// Chat with llm
+    Chat(ChatArgs),
 }
 
 #[derive(Parser, Debug)]
@@ -210,6 +240,22 @@ struct QueryArgs {
 
     #[arg(short, long)]
     prompt: String,
+}
+
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None)]
+struct ChatArgs {
+    #[arg(short, long)]
+    model: String,
+
+    #[arg(short, long)]
+    prompt: String,
+
+    #[arg(short, long)]
+    collection: Option<String>,
+
+    #[arg(short, long)]
+    file: Option<String>,
 }
 
 // TODO this is incomplete, just snagging what I use for now
@@ -224,7 +270,7 @@ struct Cli {
     uri: Option<String>,
 
     #[arg(short, long)]
-    port: Option<u32>,
+    port: Option<String>,
 
     #[command(subcommand)]
     command: Commands,
@@ -255,6 +301,10 @@ enum Ragcommands {
     Create(CreateKnowledgeArgs),
     /// Add an already uploaded file to a collection
     Add(AddKnowledgeArgs),
+    /// List uploaded files
+    List(ListArgs),
+    /// Delete an uploaded file
+    Delete(DeleteArgs),
 }
 
 #[derive(Parser, Debug)]
@@ -284,4 +334,17 @@ struct AddKnowledgeArgs {
 
     #[arg(short, long)]
     file_id: String,
+}
+
+#[derive(Parser, Debug)]
+#[command(long_about = None)]
+struct ListArgs {
+    // Empty for now
+}
+
+#[derive(Parser, Debug)]
+#[command(long_about = None)]
+struct DeleteArgs {
+    #[arg(short, long)]
+    id: String,
 }

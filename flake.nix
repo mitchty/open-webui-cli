@@ -95,10 +95,7 @@
             ./Cargo.lock
             ./common
             ./hakari
-            ./api/ollama
-            ./api/rag
-            ./api/webui
-            ./openapi/${openwebuiver}
+            ./api
             crate
           ];
         };
@@ -233,9 +230,11 @@
               # This spec is invalid? wtf
               ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/webui/openapi.json --generator-name rust --output api/webui --package-name webui --skip-validate-spec
 
+              ${pkgs.openapi-generator-cli}/bin/openapi-generator-cli generate --input-spec openapi/${openwebuiver}/default/openapi.json --generator-name rust --output api/default --package-name default
+
               # Add reqwest feature stream so we can fix the file params that take a PathBuf object
               # The openapi-generator-cli (actually the java backing it) needs a patch.
-              for api in webui ollama; do
+              for api in webui ollama default; do
                 (cd api/$api && cargo add reqwest --features stream)
               done
 

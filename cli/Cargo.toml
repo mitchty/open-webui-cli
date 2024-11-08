@@ -8,10 +8,12 @@ publish = false
 anyhow = "1.0.92"
 clap = { version = "4.5.20", features = ["derive"] }
 common = { path = "../common" }
+default = { path = "../api/default" }
 hakari = { version = "0.1", path = "../hakari" }
 ollama = { path = "../api/ollama" }
 rag = { path = "../api/rag" }
 serde = "1.0.213"
 serde_json = "1.0.132"
+serde_with = "3.11.0"
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 webui = { path = "../api/webui" }

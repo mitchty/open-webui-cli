@@ -2,7 +2,9 @@ use std::error::Error;
 
 use webui::{
     apis::{
-        files_api::upload_file_files_post,
+        files_api::{
+            delete_file_by_id_files_id_delete, list_files_files_get, upload_file_files_post,
+        },
         knowledge_api::{
             add_file_to_knowledge_by_id_knowledge_id_file_add_post,
             create_new_knowledge_knowledge_create_post,
@@ -43,5 +45,31 @@ pub async fn add(
 ) -> Result<(), Box<dyn Error>> {
     let post = add_file_to_knowledge_by_id_knowledge_id_file_add_post(&conf, &id, form).await?;
     println!("{}", post.id);
+    Ok(())
+}
+
+pub async fn listfiles(
+    conf: webui::apis::configuration::Configuration,
+) -> Result<(), Box<dyn Error>> {
+    let values = list_files_files_get(&conf).await?;
+    for i in values.iter() {
+        println!(
+            "id {} hash {} filename {}",
+            i.id,
+            i.hash.clone().unwrap_or("unknown".to_string()),
+            i.meta
+                .name
+                .clone()
+                .unwrap_or("no uploaded filename".to_string())
+        );
+    }
+    Ok(())
+}
+
+pub async fn deletefile(
+    id: &str,
+    conf: webui::apis::configuration::Configuration,
+) -> Result<(), Box<dyn Error>> {
+    let _resp = delete_file_by_id_files_id_delete(&conf, id).await?;
     Ok(())
 }
