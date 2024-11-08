@@ -11,3 +11,4 @@ keys = ["dependencies"]
 
 [rule.formatting]
 reorder_keys = true
+column_width = 100  # the hakari syn entry is 90 chars it keeps multi lining it

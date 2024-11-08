@@ -17,11 +17,18 @@ edition.workspace = true
 [dependencies]
 reqwest = { version = "0.12", features = ["json", "multipart", "stream"] }
 serde = { version = "1", features = ["alloc", "derive"] }
+serde_with = { version = "3", features = ["base64"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
 
 [build-dependencies]
 proc-macro2 = { version = "1" }
 quote = { version = "1" }
-syn = { version = "2", features = ["extra-traits", "full", "visit-mut"] }
+syn = { version = "2", features = [
+  "extra-traits",
+  "fold",
+  "full",
+  "visit",
+  "visit-mut",
+] }
 
 ### END HAKARI SECTION

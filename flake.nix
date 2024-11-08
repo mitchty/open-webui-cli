@@ -250,9 +250,11 @@
               # Patch the incompetently produced openapi code from
               # openapi-generate-cli to actually work, TODO upstream the fixes
               # to the openapi-generator to be able to use paths properly.
-              for patchit in ollama webui; do
-                patch -p1 < ./patches/$patchit-${openwebuiver}.patch
+              for patchit in ollama webui default; do
+                patch -p1 < ./patches/${openwebuiver}/$patchit.patch
               done
+
+              sed -i '3s/^/#![allow(non_snake_case)]\n/' api/*/src/lib.rs
 
               # If theres uncommitted files watever
               #cargo fix --allow-dirty

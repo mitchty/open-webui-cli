@@ -43,7 +43,7 @@ pub async fn add(
     id: &str,
     form: KnowledgeFileIdForm,
 ) -> Result<(), Box<dyn Error>> {
-    let post = add_file_to_knowledge_by_id_knowledge_id_file_add_post(&conf, &id, form).await?;
+    let post = add_file_to_knowledge_by_id_knowledge_id_file_add_post(&conf, id, form).await?;
     println!("{}", post.id);
     Ok(())
 }

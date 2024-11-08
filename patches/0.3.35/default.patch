@@ -1,0 +1,16 @@
+diff --git a/api/default/src/apis/default_api.rs b/api/default/src/apis/default_api.rs
+index 43c6b80..c29255d 100644
+--- a/api/default/src/apis/default_api.rs
++++ b/api/default/src/apis/default_api.rs
+@@ -1613,9 +1613,9 @@ pub async fn upload_pipeline_api_pipelines_upload_post(
+     if let Some(ref local_var_token) = local_var_configuration.bearer_access_token {
+         local_var_req_builder = local_var_req_builder.bearer_auth(local_var_token.to_owned());
+     };
+-    let mut local_var_form = reqwest::multipart::Form::new();
++    let mut local_var_form = reqwest::multipart::Form::new().file("file", file).await?;
+     local_var_form = local_var_form.text("urlIdx", url_idx.to_string());
+-    // TODO: support file upload for 'file' parameter
++
+     local_var_req_builder = local_var_req_builder.multipart(local_var_form);
+ 
+     let local_var_req = local_var_req_builder.build()?;

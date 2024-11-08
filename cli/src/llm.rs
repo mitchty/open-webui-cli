@@ -1,14 +1,10 @@
-use std::collections::HashMap;
 use std::error::Error;
 
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
 
 use ollama::{
-    apis::default_api::{
-        generate_completion_api_generate_post,
-        generate_openai_chat_completion_v1_chat_completions_post, get_openai_models_v1_models_get,
-    },
+    apis::default_api::{generate_completion_api_generate_post, get_openai_models_v1_models_get},
     models::GenerateCompletionForm,
 };
 
@@ -48,22 +44,6 @@ pub async fn list(conf: ollama::apis::configuration::Configuration) -> Result<()
     Ok(())
 }
 
-// enum ChatMessageRole {
-//     User,
-// }
-
-// enum ChatFileType {
-//     Collection,
-//     File,
-// }
-
-// #[derive(Debug, Serialize, Deserialize)]
-// struct ChatCompletionData {
-//     model: String,
-//     messages: Vec<HashMap<String, String>>,
-//     files: Vec<HashMap<String, String>>,
-// }
-
 #[serde_as]
 #[derive(Serialize, Deserialize, Debug)]
 struct ChatCompletionData {
@@ -94,12 +74,10 @@ pub async fn chat(
     files: Option<String>,
     conf: default::apis::configuration::Configuration,
 ) -> Result<(), Box<dyn Error>> {
-    // for the future
-    let mut messages = Vec::new();
-    messages.push(ChatMessage {
+    let messages = vec![ChatMessage {
         role: "user".to_string(),
         content: prompt.to_string(),
-    });
+    }];
 
     let mut outfiles = Vec::new();
 
@@ -119,13 +97,13 @@ pub async fn chat(
         });
     }
 
-    if outfiles.len() > 0 {
+    if !outfiles.is_empty() {
         cols = Some(outfiles);
     }
 
     let body = ChatCompletionData {
         model: model.to_string(),
-        messages: messages,
+        messages,
         files: cols,
     };
 

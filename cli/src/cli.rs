@@ -52,16 +52,16 @@ impl std::error::Error for LazyError {
 // In the end who gives af, this is all just run once per cli invocation not a critical concern.j
 //
 // This might better be in its own module space too..
-fn rag_conf(uri: &str, port: &str, token: &str) -> rag::apis::configuration::Configuration {
-    let def_conf = rag::apis::configuration::Configuration::default();
+// fn rag_conf(uri: &str, port: &str, token: &str) -> rag::apis::configuration::Configuration {
+//     let def_conf = rag::apis::configuration::Configuration::default();
 
-    rag::apis::configuration::Configuration {
-        base_path: format!("http://{}:{}{}", uri, port, def_conf.base_path),
-        bearer_access_token: Some(token.to_string()),
-        user_agent: Some("open-webui-cli/rust".to_owned()),
-        ..rag::apis::configuration::Configuration::default()
-    }
-}
+//     rag::apis::configuration::Configuration {
+//         base_path: format!("http://{}:{}{}", uri, port, def_conf.base_path),
+//         bearer_access_token: Some(token.to_string()),
+//         user_agent: Some("open-webui-cli/rust".to_owned()),
+//         ..rag::apis::configuration::Configuration::default()
+//     }
+// }
 
 fn webui_conf(uri: &str, port: &str, token: &str) -> webui::apis::configuration::Configuration {
     let def_conf = webui::apis::configuration::Configuration::default();
@@ -107,23 +107,23 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     // TODO better error handling...
     if api_token.is_none() {
-        return Err(LazyError::new(&format!("missing api_token")).into());
+        return Err(Box::new(LazyError::new("missing api_token")));
     }
 
     if api_uri.is_none() {
-        return Err(LazyError::new(&format!("missing api_uri")).into());
+        return Err(Box::new(LazyError::new("missing api_uri")));
     }
 
     if api_port.is_none() {
-        return Err(LazyError::new(&format!("missing api_port")).into());
+        return Err(Box::new(LazyError::new("missing api_port")));
     }
 
     // Forgive my .clone() sins cause for this abusing the heap is whatever.
-    let rag_conf = rag_conf(
-        &api_uri.clone().unwrap(),
-        &api_port.clone().unwrap(),
-        &api_token.clone().unwrap(),
-    );
+    // let rag_conf = rag_conf(
+    //     &api_uri.clone().unwrap(),
+    //     &api_port.clone().unwrap(),
+    //     &api_token.clone().unwrap(),
+    // );
     let webui_conf = webui_conf(
         &api_uri.clone().unwrap(),
         &api_port.clone().unwrap(),

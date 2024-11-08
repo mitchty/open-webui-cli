@@ -489,6 +489,7 @@ dependencies = [
  "quote",
  "reqwest",
  "serde",
+ "serde_with",
  "syn",
  "tokio",
 ]
