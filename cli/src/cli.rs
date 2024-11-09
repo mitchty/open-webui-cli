@@ -7,7 +7,6 @@ use anyhow::Result;
 // crap I will likely be changing at some point in the future.
 use clap::{Parser, Subcommand};
 
-use std::fmt;
 use webui::models::{KnowledgeFileIdForm, KnowledgeForm};
 
 // All the actual async fn calls are in these castles. module names == top level

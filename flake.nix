@@ -171,22 +171,22 @@
           });
 
           # Ensure that cargo-hakari is up to date
-          open-webui-cli-hakari = craneLib.mkCargoDerivation {
-            inherit src;
-            pname = "open-webui-cli-hakari";
-            cargoArtifacts = null;
-            doInstallCargoArtifacts = false;
+          # open-webui-cli-hakari = craneLib.mkCargoDerivation {
+          #   inherit src;
+          #   pname = "open-webui-cli-hakari";
+          #   cargoArtifacts = null;
+          #   doInstallCargoArtifacts = false;
 
-            buildPhaseCargoCommand = ''
-              cargo hakari generate --diff  # workspace-hack Cargo.toml is up-to-date
-              cargo hakari manage-deps --dry-run  # all workspace crates depend on workspace-hack
-              cargo hakari verify
-            '';
+          #   buildPhaseCargoCommand = ''
+          #     cargo hakari generate --diff  # workspace-hack Cargo.toml is up-to-date
+          #     cargo hakari manage-deps --dry-run  # all workspace crates depend on workspace-hack
+          #     cargo hakari verify
+          #   '';
 
-            nativeBuildInputs = [
-              pkgs.cargo-hakari
-            ];
-          };
+          #   nativeBuildInputs = [
+          #     pkgs.cargo-hakari
+          #   ];
+          # };
         };
 
         packages = {
