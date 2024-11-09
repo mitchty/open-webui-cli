@@ -114,7 +114,7 @@ index 9969f98..56ddeb0 100644
 -        serde_json::from_str(&local_var_content).map_err(Error::from)
 +        if local_var_content == "[]" {
 +            Ok(None)
-+        }else {
++        } else {
 +            serde_json::from_str(&local_var_content).map_err(Error::from)
 +        }
      } else {
