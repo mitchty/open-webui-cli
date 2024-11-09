@@ -85,3 +85,51 @@ index d034c2c..b4deecd 100644
              meta,
              created_at,
              updated_at,
+diff --git a/api/webui/src/apis/knowledge_api.rs b/api/webui/src/apis/knowledge_api.rs
+index 9969f98..56ddeb0 100644
+--- a/api/webui/src/apis/knowledge_api.rs
++++ b/api/webui/src/apis/knowledge_api.rs
+@@ -9,7 +9,7 @@
+  */
+ 
+ use super::{configuration, Error};
+-use crate::{apis::ResponseContent, models};
++use crate::{apis::ResponseContent, models::{self, ResponseGetKnowledgeItemsKnowledgeGet}};
+ use reqwest;
+ use serde::{Deserialize, Serialize};
+ 
+@@ -264,7 +264,7 @@ pub async fn get_knowledge_by_id_knowledge_id_get(
+ pub async fn get_knowledge_items_knowledge_get(
+     configuration: &configuration::Configuration,
+     id: Option<&str>,
+-) -> Result<models::ResponseGetKnowledgeItemsKnowledgeGet, Error<GetKnowledgeItemsKnowledgeGetError>>
++) -> Result<Option<Vec<models::ResponseGetKnowledgeItemsKnowledgeGet>>, Error<GetKnowledgeItemsKnowledgeGetError>>
+ {
+     let local_var_configuration = configuration;
+ 
+@@ -292,7 +292,11 @@ pub async fn get_knowledge_items_knowledge_get(
+     let local_var_content = local_var_resp.text().await?;
+ 
+     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+-        serde_json::from_str(&local_var_content).map_err(Error::from)
++        if local_var_content == "[]" {
++            Ok(None)
++        }else {
++            serde_json::from_str(&local_var_content).map_err(Error::from)
++        }
+     } else {
+         let local_var_entity: Option<GetKnowledgeItemsKnowledgeGetError> =
+             serde_json::from_str(&local_var_content).ok();
+diff --git a/api/webui/src/models/response_get_knowledge_items_knowledge__get.rs b/api/webui/src/models/response_get_knowledge_items_knowledge__get.rs
+index 71e5978..5b23cc9 100644
+--- a/api/webui/src/models/response_get_knowledge_items_knowledge__get.rs
++++ b/api/webui/src/models/response_get_knowledge_items_knowledge__get.rs
+@@ -27,7 +27,7 @@ pub struct ResponseGetKnowledgeItemsKnowledgeGet {
+     pub created_at: i32,
+     #[serde(rename = "updated_at")]
+     pub updated_at: i32,
+-    #[serde(rename = "files", skip_serializing_if = "Option::is_none")]
++    #[serde(rename = "files", skip_serializing_if = "Option::is_none", default)]
+     pub files: Option<Vec<models::KnowledgeResponseFilesInner>>,
+ }
+ 

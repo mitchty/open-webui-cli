@@ -9,7 +9,7 @@
  */
 
 use super::{configuration, Error};
-use crate::{apis::ResponseContent, models};
+use crate::{apis::ResponseContent, models::{self, ResponseGetKnowledgeItemsKnowledgeGet}};
 use reqwest;
 use serde::{Deserialize, Serialize};
 
@@ -264,7 +264,7 @@ pub async fn get_knowledge_by_id_knowledge_id_get(
 pub async fn get_knowledge_items_knowledge_get(
     configuration: &configuration::Configuration,
     id: Option<&str>,
-) -> Result<models::ResponseGetKnowledgeItemsKnowledgeGet, Error<GetKnowledgeItemsKnowledgeGetError>>
+) -> Result<Option<Vec<models::ResponseGetKnowledgeItemsKnowledgeGet>>, Error<GetKnowledgeItemsKnowledgeGetError>>
 {
     let local_var_configuration = configuration;
 
@@ -292,7 +292,11 @@ pub async fn get_knowledge_items_knowledge_get(
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        serde_json::from_str(&local_var_content).map_err(Error::from)
+        if local_var_content == "[]" {
+            Ok(None)
+        }else {
+            serde_json::from_str(&local_var_content).map_err(Error::from)
+        }
     } else {
         let local_var_entity: Option<GetKnowledgeItemsKnowledgeGetError> =
             serde_json::from_str(&local_var_content).ok();
