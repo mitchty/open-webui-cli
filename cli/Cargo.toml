@@ -7,7 +7,6 @@ publish = false
 [dependencies]
 anyhow = "1.0.92"
 clap = { version = "4.5.20", features = ["derive"] }
-common = { path = "../common" }
 default = { path = "../api/default" }
 hakari = { version = "0.1", path = "../hakari" }
 ollama = { path = "../api/ollama" }

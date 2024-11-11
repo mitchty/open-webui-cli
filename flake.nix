@@ -55,12 +55,6 @@
           name = "source";
         };
 
-        sslArgs = {
-          OPENSSL_DIR = "${pkgs.openssl.dev}";
-          OPENSSL_LIB_DIR = "${pkgs.openssl.out}/lib";
-          OPENSSL_INCLUDE_DIR = "${pkgs.openssl.dev}/include/";
-        };
-
         # Common arguments can be set here to avoid repeating them later
         commonArgs = {
           inherit src;
@@ -81,7 +75,7 @@
 
           # Additional environment variables can be set directly
           # MY_CUSTOM_VAR = "some value";
-        } // sslArgs;
+        };
 
         craneLibLLvmTools = craneLib.overrideToolchain
           (fenix.packages.${system}.complete.withComponents [
@@ -108,7 +102,6 @@
           fileset = lib.fileset.unions [
             ./Cargo.toml
             ./Cargo.lock
-            ./common
             ./hakari
             ./api
             crate
@@ -147,7 +140,7 @@
           targets = [ "x86_64-unknown-linux-musl" ];
         });
 
-        open-webui-cli-static = craneLibStatic.buildPackage (commonArgs // staticEnv // sslArgs // {
+        open-webui-cli-static = craneLibStatic.buildPackage (commonArgs // staticEnv // {
           pname = "open-webui-cli-static";
           cargoExtraArgs = "-p open-webui-cli";
           src = fileSetForCrate ./cli;
@@ -244,7 +237,7 @@
           };
         };
 
-        devShells.default = craneLib.devShell (sslArgs // {
+        devShells.default = craneLib.devShell {
           # Inherit inputs from checks.
           checks = self.checks.${system};
 
@@ -273,8 +266,10 @@
 
               # Add reqwest feature stream so we can fix the file params that take a PathBuf object
               # The openapi-generator-cli (actually the java backing it) needs a patch.
-              for api in webui ollama default; do
-                (cd api/$api && cargo add reqwest --features stream)
+              for api in api/*; do
+                (cd $api &&
+                   cargo add reqwest --no-default-features --features rustls-tls,stream,json
+                )
               done
 
               # I dunno wat the real license should be its generated who cares.
@@ -299,6 +294,6 @@
               #cargo fix --allow-dirty
             '')
           ];
-        });
+        };
       });
 }

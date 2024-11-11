@@ -15,7 +15,7 @@ edition.workspace = true
 
 ### BEGIN HAKARI SECTION
 [dependencies]
-reqwest = { version = "0.12", features = ["json", "multipart", "stream"] }
+reqwest = { version = "0.12", features = ["json", "multipart", "rustls-tls", "stream"], default-features = false }
 serde = { version = "1", features = ["alloc", "derive"] }
 serde_with = { version = "3", features = ["base64"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "sync"] }
