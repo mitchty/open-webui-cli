@@ -6,6 +6,8 @@ pub mod delete;
 pub mod link;
 pub mod list;
 pub mod new;
+pub mod pull;
+pub mod upload;
 
 // I'm lazy so just for now have a lame af error struct. Future mitch gets to fix it. Sucker....
 //

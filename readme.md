@@ -13,7 +13,7 @@ Note: I might end up changing the cli ux as I implement more of the apis. I'm tr
 
 ## Implemented functions
 
-Note the cli is mostly self documenting, run it without arguments for details.
+Note the cli is mostly self documenting, run it without arguments for details. It also follows "no news is good news" as a general principle. If the return code is 0 everything should be ok.
 
 But in general you can at least do:
 - Knowledge collection deletion/creation/add files
@@ -26,12 +26,8 @@ Chat with a model and get result back (answer is sus but its an example):
 
 ```sh
 $ open-webui-cli list models
-codellama:latest
-llama3:latest
-mistral:latest
-nomic-embed-text:latest
-gemma:latest
-nemotron-mini:latest
+$ open-webui-cli pull model --name llama3.2:latest
+$ open-webui-cli list models
 llama3.2:latest
 $ open-webui-cli chat --model llama3.2:latest --prompt "how many roman imperators built walls (answer with the number only)"
 21
@@ -41,7 +37,7 @@ See how many kind of color dragons there are in DND (allegedly I don't know I'm 
 
 ```sh
 $ curl -sLO https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf
-$ open-webui-cli new file --file DnD_BasicRules_2018.pdf
+$ open-webui-cli upload file --name DnD_BasicRules_2018.pdf
 84bc4e62-c952-4904-84d1-6341a1ae1036
 $ open-webui-cli chat --model llama3.2:latest --prompt "how many color dragons are in dnd (answer with the color names only)" --file 84bc4e62-c952-4904-84d1-6341a1ae1036
 There are 3 color dragons: Blue, Green, and Red.
@@ -50,6 +46,38 @@ Red, Blue, Green, White, Black, Copper, Gold, Silver
 ```
 
 Which is true? Only the shadow knows or a DND nerd. Wonder why there aren't titanium dragons or other metals. Probably not a rat hole I want to go down.
+
+We can similarly use collections instead of individual files:
+
+```sh
+$ curl -sLO https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf
+$ curl -sLO http://media.wizards.com/2014/downloads/dnd/PlayerDnDBasicRules_v0.2_PrintFriendly.pdf
+$ open-webui-cli upload file --name DnD_BasicRules_2018.pdf
+c90d289c-0009-4150-8ebb-6f5a0628607d
+$ open-webui-cli upload file --name PlayerDnDBasicRules_v0.2_PrintFriendly.pdf
+f9923666-d337-4514-8868-6a725967220b
+$ open-webui-cli new collection --name dnd --description "dnd bag of holding"
+1ae97ee3-c7c0-400d-9b5c-b9939def311f
+$ open-webui-cli link collection --id 1ae97ee3-c7c0-400d-9b5c-b9939def311f --file-id f9923666-d337-4514-8868-6a725967220b
+1ae97ee3-c7c0-400d-9b5c-b9939def311f
+$ open-webui-cli link collection --id 1ae97ee3-c7c0-400d-9b5c-b9939def311f --file-id c90d289c-0009-4150-8ebb-6f5a0628607d
+1ae97ee3-c7c0-400d-9b5c-b9939def311f
+$ open-webui-cli chat --model llama3.2:latest --prompt "how many color dragons are in dnd (answer with the color names only)" --collection 1ae97ee3-c7c0-400d-9b5c-b9939def311f
+There is only one color dragon mentioned, a red dragon.
+$ open-webui-cli chat --model llama3.2:latest --prompt "summarize the pdfs in this collection" --collection 1ae97ee3-c7c0-400d-9b5c-b9939def311f
+The PDF collection contains rules and information for Dungeons & Dragons (D&D) players. The content is divided into two main sections: "DnD Basic Rules_2018.pdf" and "PlayerDnDBasicRules_v0.2_PrintFriendly.pdf".
+
+The first section, "DnD Basic Rules_2018.pdf", appears to be a basic ruleset for the game, covering various aspects such as character creation, combat, and gameplay mechanics.
+
+The second section, "PlayerDnDBasicRules_v0.2_PrintFriendly.pdf", provides more detailed information on tools, equipment, and skills for players. The content includes lists of items such as Smith's tools, Tinker's tools, Weaver's tools, and others, along with their prices and weights.
+
+Some notable items mentioned in the document include:
+
+* Forgery kit: a box containing papers, pens, ink, seals, and other supplies to create convincing forgeries.
+* Gaming set: an item that includes game pieces, such as dice and decks of cards, which allows players to add their proficiency bonus to ability checks when playing with that set.
+
+Overall, the PDF collection provides a comprehensive resource for D&D players, covering various aspects of the game.
+```
 
 ## Installation
 

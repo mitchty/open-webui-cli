@@ -77,13 +77,13 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
             ListCommands::Collections => super::list::collections(webui_conf).await?,
         },
         Commands::Delete(sc) => match &sc.subcommand {
-            DeleteCommands::File(rest) => super::delete::file(&rest.id, webui_conf).await?,
             DeleteCommands::Collection(rest) => {
                 super::delete::collection(&rest.id, webui_conf).await?
             }
+            DeleteCommands::File(rest) => super::delete::file(&rest.id, webui_conf).await?,
+            DeleteCommands::Model(rest) => super::delete::model(&rest.name, ollama_conf).await?,
         },
         Commands::New(sc) => match &sc.subcommand {
-            NewCommands::File(rest) => super::new::file(webui_conf, &rest.file).await?,
             NewCommands::Collection(rest) => {
                 super::new::collection(
                     webui_conf,
@@ -101,6 +101,12 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
                 )
                 .await?
             }
+        },
+        Commands::Pull(sc) => match &sc.subcommand {
+            PullCommands::Model(rest) => super::pull::model(ollama_conf, &rest.name).await?,
+        },
+        Commands::Upload(sc) => match &sc.subcommand {
+            UploadCommands::File(rest) => super::upload::file(webui_conf, &rest.name).await?,
         },
         // Commands::Llm(sc) => match &sc.subcommand {
         //     Llmcommands::Query(rest) => query(&rest.model, &rest.prompt, ollama_conf).await?,
@@ -123,9 +129,8 @@ struct Cli {
     port: Option<String>,
 
     // NYI what "verbose" looks like, placeholder for later
-    #[arg(short, long)]
-    verbose: Option<bool>,
-
+    // #[arg(short, long)]
+    // verbose: Option<bool>,
     #[command(subcommand)]
     command: Commands,
 }
@@ -136,14 +141,18 @@ struct Cli {
 enum Commands {
     /// Chat with an llm
     Chat(ChatArgs),
-    /// List objects
-    List(ListArgs),
     /// Delete objects
     Delete(DeleteArgs),
-    /// Operations to create objects
-    New(NewArgs),
     /// Link objects together
     Link(LinkArgs),
+    /// List objects
+    List(ListArgs),
+    /// Operations to create objects
+    New(NewArgs),
+    /// Operations to pull data
+    Pull(PullArgs),
+    /// Operations to upload data
+    Upload(UploadArgs),
 }
 
 // open-webui chat related stuff (TODO keep ollama prompt?)
@@ -174,12 +183,12 @@ struct ListArgs {
 
 #[derive(Subcommand, Debug)]
 enum ListCommands {
+    /// List knowledge collections
+    Collections,
     /// List uploaded files in RAG db
     Files,
     /// List downloaded llm models
     Models,
-    /// List knowledge collections
-    Collections,
 }
 
 // Delete related args/subcommands
@@ -192,10 +201,19 @@ struct DeleteArgs {
 
 #[derive(Subcommand, Debug)]
 enum DeleteCommands {
-    /// Delete files from RAG db
-    File(FileDeleteArgs),
     /// Delete knowledge collection
     Collection(CollectionDeleteArgs),
+    /// Delete files from RAG db
+    File(FileDeleteArgs),
+    /// Delete an llm model
+    Model(ModelDeleteArgs),
+}
+
+#[derive(Parser, Debug)]
+struct CollectionDeleteArgs {
+    /// Collection id to delete
+    #[arg(short, long)]
+    id: String,
 }
 
 #[derive(Parser, Debug)]
@@ -206,10 +224,10 @@ struct FileDeleteArgs {
 }
 
 #[derive(Parser, Debug)]
-struct CollectionDeleteArgs {
-    /// Collection id to delete
+struct ModelDeleteArgs {
+    /// Model name to delete
     #[arg(short, long)]
-    id: String,
+    name: String,
 }
 
 // New obect related args/subcommands
@@ -221,19 +239,8 @@ struct NewArgs {
 
 #[derive(Subcommand, Debug)]
 enum NewCommands {
-    /// Upload local file to RAG db
-    File(FileNewArgs),
     /// Create a knowledge collection
     Collection(CollectionNewArgs),
-}
-
-#[derive(Parser, Debug)]
-struct FileNewArgs {
-    /// Local file to upload
-    #[arg(short, long)]
-    file: String,
-    // In future make adding to a collection easy
-    // collection: Option<String>
 }
 
 #[derive(Parser, Debug)]
@@ -269,22 +276,45 @@ struct LinkCollectionArgs {
     #[arg(short, long)]
     file_id: String,
 }
-// #[derive(Parser, Debug)]
-// #[command(version, about, long_about = None)]
-// struct QueryArgs {
-//     #[arg(short, long)]
-//     model: String,
 
-//     #[arg(short, long)]
-//     prompt: String,
-// }
+// New obect related args/subcommands
+#[derive(Parser, Debug)]
+struct PullArgs {
+    #[command(subcommand)]
+    subcommand: PullCommands,
+}
 
-// #[derive(Parser, Debug)]
-// #[command(long_about = None)]
-// struct AddKnowledgeArgs {
-//     #[arg(short, long)]
-//     id: String,
+#[derive(Subcommand, Debug)]
+enum PullCommands {
+    /// Pull a model to ollama instance
+    Model(ModelPullArgs),
+}
 
-//     #[arg(short, long)]
-//     file_id: String,
-// }
+#[derive(Parser, Debug)]
+struct ModelPullArgs {
+    /// Model name to load, note should be form of model:tag, if tag is missing :latest will be assumed
+    #[arg(short, long)]
+    name: String,
+}
+
+// New obect related args/subcommands
+#[derive(Parser, Debug)]
+struct UploadArgs {
+    #[command(subcommand)]
+    subcommand: UploadCommands,
+}
+
+#[derive(Subcommand, Debug)]
+enum UploadCommands {
+    /// Upload local file to RAG db
+    File(FileUploadArgs),
+}
+
+#[derive(Parser, Debug)]
+struct FileUploadArgs {
+    /// Local file name to upload
+    #[arg(short, long)]
+    name: String,
+    // In future make adding to a collection easy
+    // collection: Option<String>
+}

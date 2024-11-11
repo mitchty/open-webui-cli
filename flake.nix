@@ -18,13 +18,23 @@
       url = "github:rustsec/advisory-db";
       flake = false;
     };
+
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
-  outputs = { self, nixpkgs, crane, fenix, flake-utils, advisory-db, ... }:
+  outputs = { self, nixpkgs, crane, fenix, flake-utils, advisory-db, rust-overlay, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
-
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ (import rust-overlay) ];
+        };
         inherit (pkgs) lib;
 
         # From https://github.com/ipetkov/crane/blob/fa8b7445ddadc37850ed222718ca86622be01967/docs/advanced/overriding-function-behavior.md?plain=1#L20C1-L28C6
@@ -62,6 +72,11 @@
             # Additional darwin specific inputs can be set here
             pkgs.libiconv
             pkgs.darwin.apple_sdk.frameworks.SystemConfiguration
+          ];
+
+          nativeBuildInputs = [ ] ++ lib.optionals pkgs.stdenv.isLinux [
+            pkgs.mold-wrapped
+            pkgs.lld
           ];
 
           # Additional environment variables can be set directly
@@ -112,6 +127,28 @@
 
         open-webui-cli-release = craneLib.buildPackage (individualCrateArgs // {
           pname = "open-webui-cli";
+          cargoExtraArgs = "-p open-webui-cli";
+          src = fileSetForCrate ./cli;
+          CARGO_PROFILE = "release";
+        });
+
+        staticEnv = {
+          CARGO_BUILD_TARGET = "x86_64-unknown-linux-musl";
+          CARGO_BUILD_RUSTFLAGS = "-C target-feature=+crt-static";
+          RUSTFLAGS = "-C link-arg=-fuse-ld=mold";
+        };
+
+        # TODO need to make this work across x86_64 and arm on linux
+        nativeToolchain = pkgs.rust-bin.stable.latest.default.override {
+          targets = [ "x86_64-unknown-linux-musl" ];
+        };
+
+        craneLibStatic = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default.override {
+          targets = [ "x86_64-unknown-linux-musl" ];
+        });
+
+        open-webui-cli-static = craneLibStatic.buildPackage (commonArgs // staticEnv // sslArgs // {
+          pname = "open-webui-cli-static";
           cargoExtraArgs = "-p open-webui-cli";
           src = fileSetForCrate ./cli;
           CARGO_PROFILE = "release";
@@ -171,22 +208,22 @@
           });
 
           # Ensure that cargo-hakari is up to date
-          # open-webui-cli-hakari = craneLib.mkCargoDerivation {
-          #   inherit src;
-          #   pname = "open-webui-cli-hakari";
-          #   cargoArtifacts = null;
-          #   doInstallCargoArtifacts = false;
+          open-webui-cli-hakari = craneLib.mkCargoDerivation {
+            inherit src;
+            pname = "open-webui-cli-hakari";
+            cargoArtifacts = null;
+            doInstallCargoArtifacts = false;
 
-          #   buildPhaseCargoCommand = ''
-          #     cargo hakari generate --diff  # workspace-hack Cargo.toml is up-to-date
-          #     cargo hakari manage-deps --dry-run  # all workspace crates depend on workspace-hack
-          #     cargo hakari verify
-          #   '';
+            buildPhaseCargoCommand = ''
+              cargo hakari generate --diff  # workspace-hack Cargo.toml is up-to-date
+              cargo hakari manage-deps --dry-run  # all workspace crates depend on workspace-hack
+              cargo hakari verify
+            '';
 
-          #   nativeBuildInputs = [
-          #     pkgs.cargo-hakari
-          #   ];
-          # };
+            nativeBuildInputs = [
+              pkgs.cargo-hakari
+            ];
+          };
         };
 
         packages = {
@@ -197,6 +234,8 @@
           open-webui-cli-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (commonArgs // {
             inherit cargoArtifacts;
           });
+        } // lib.optionalAttrs (pkgs.stdenv.isLinux) {
+          static = open-webui-cli-static;
         };
 
         apps = {
@@ -250,7 +289,7 @@
               # Patch the incompetently produced openapi code from
               # openapi-generate-cli to actually work, TODO upstream the fixes
               # to the openapi-generator to be able to use paths properly.
-              for patchit in ollama webui default; do
+              for patchit in default ollama webui; do
                 patch -p1 < ./patches/${openwebuiver}/$patchit.patch
               done
 

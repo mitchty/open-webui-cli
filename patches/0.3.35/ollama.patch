@@ -24,3 +24,31 @@ index 0972b5b..9efff58 100644
      local_var_req_builder = local_var_req_builder.multipart(local_var_form);
  
      let local_var_req = local_var_req_builder.build()?;
+diff --git b/api/ollama/src/apis/default_api.rs a/api/ollama/src/apis/default_api.rs
+index bb2b70b..be9be61 100644
+--- b/api/ollama/src/apis/default_api.rs
++++ a/api/ollama/src/apis/default_api.rs
+@@ -1585,7 +1585,22 @@ pub async fn pull_model_api_pull_post(
+     let local_var_content = local_var_resp.text().await?;
+ 
+     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+-        serde_json::from_str(&local_var_content).map_err(Error::from)
++        use std::str::Lines;
++        let lines = &local_var_content.split("\n").collect::<Vec<&str>>();
++
++        // Note last here's a bit of a lie, its second to last, last is an empty newline
++        if let Some(last) = lines.iter().rev().nth(1) {
++            serde_json::from_str(&last).map_err(Error::from)
++        } else {
++            let local_var_entity: Option<PullModelApiPullPostError> =
++                serde_json::from_str(&local_var_content).ok();
++            let local_var_error = ResponseContent {
++                status: local_var_status,
++                content: local_var_content,
++                entity: local_var_entity,
++            };
++            Err(Error::ResponseError(local_var_error))
++        }
+     } else {
+         let local_var_entity: Option<PullModelApiPullPostError> =
+             serde_json::from_str(&local_var_content).ok();
