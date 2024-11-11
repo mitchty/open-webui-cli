@@ -33,7 +33,7 @@ $ open-webui-cli chat --model llama3.2:latest --prompt "how many roman imperator
 21
 ```
 
-See how many kind of color dragons there are in DND (allegedly I don't know I'm not a DND fan so I assume the AI is perfect entirely correct. All I know is there is a lot of them of all colors like a rainbow):
+See how many kind of color dragons there are in DND (allegedly I don't know I'm not a DND fan so I assume the AI is perfect at everything. All I know is there is a lot of them of all colors like a rainbow based off conversations I've overheard DND friends have):
 
 ```sh
 $ curl -sLO https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf
@@ -81,21 +81,17 @@ Overall, the PDF collection provides a comprehensive resource for D&D players, c
 
 ## Installation
 
-- Well cargo build/install it for now
-- If you have nix and direnv you can just `direnv allow` and then `nix build` to build binaries.
-- Or if you use nix you can just run it this way `nix run github:mitchty/open-webui-cli -- args`
+Snag it from the releases page. or if you're building from source then cargo build/install as is tradition.
+
+If you have nix and direnv you can just `direnv allow` and then `nix build` to build binaries. Or if using nix you can just build/run it directly like any other flake. `nix run github:mitchty/open-webui-cli -- args`
 
 ## TODO
 
-A metric ton of stuff ordered by priority:
-- llm related actions
-- anything else I end up using
-- musl static build with github release/action for linux x86/arm
-- chat api so you can use ^^^
-- delete/add llm models
+A metric ton of stuff ordered by priority (roughly):
+- anything else I end up abusing
 - define new models based on existing
-- ?
-- More auth types?
+- profit?
+- More auth types than the api token?
 - Better error handling? (I cheaped out on a lot of this for now, using anyhow so should be able to improve it with some effort)
-- macos/windows binaries for releases too?
 - unit tests? Not sure how I want to do this for the moment
+- Open up issues for anything else. Some of these apis are rather ill defined, or the openapi generator goes insane or both at times.
