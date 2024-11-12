@@ -34,7 +34,7 @@ struct ChatFile {
 // Why there are two different chat apis is beyond me
 pub async fn chat(
     model: &str,
-    prompt: &str,
+    prompt: &Vec<String>,
     system: &str,
     collection: Option<String>, // TODO vec of collections at some point
     files: Option<String>,
@@ -45,10 +45,10 @@ pub async fn chat(
         content: system.to_string(),
     }];
 
-    if prompt != "" {
+    for a_prompt in prompt.iter() {
         messages.push(ChatMessage {
             role: "user".to_string(),
-            content: prompt.to_string(),
+            content: a_prompt.to_string(),
         });
     }
 
