@@ -8,6 +8,7 @@ license = "BlueOak-1.0.0"
 edition = "2021"
 
 [dependencies]
+hakari = { version = "0.1", path = "../../hakari" }
 reqwest = { version = "^0.12", features = [
   "json",
   "multipart",
@@ -20,4 +21,3 @@ serde_repr = "^0.1"
 serde_with = { version = "^3.8", default-features = false, features = ["base64", "std", "macros"] }
 url = "^2.5"
 uuid = { version = "^1.8", features = ["serde", "v4"] }
-hakari = { version = "0.1", path = "../../hakari" }
