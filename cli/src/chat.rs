@@ -35,14 +35,22 @@ struct ChatFile {
 pub async fn chat(
     model: &str,
     prompt: &str,
+    system: &str,
     collection: Option<String>, // TODO vec of collections at some point
     files: Option<String>,
     conf: default::apis::configuration::Configuration,
 ) -> Result<(), Box<dyn Error>> {
-    let messages = vec![ChatMessage {
-        role: "user".to_string(),
-        content: prompt.to_string(),
+    let mut messages = vec![ChatMessage {
+        role: "system".to_string(),
+        content: system.to_string(),
     }];
+
+    if prompt != "" {
+        messages.push(ChatMessage {
+            role: "user".to_string(),
+            content: prompt.to_string(),
+        });
+    }
 
     let mut outfiles = Vec::new();
 
@@ -75,6 +83,7 @@ pub async fn chat(
     let http_body = serde_json::to_value(&body)?;
 
     let query = generate_chat_completions_api_chat_completions_post(&conf, http_body, None).await?;
+
     let reply: ChatData = serde_json::from_value(query.clone())?;
 
     for t in reply.choices.iter() {

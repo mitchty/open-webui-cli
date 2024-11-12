@@ -64,7 +64,8 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
         Commands::Chat(rest) => {
             super::chat::chat(
                 &rest.model,
-                &rest.prompt,
+                &rest.prompt.clone().unwrap_or_else(|| "".to_string()),
+                &rest.system.clone().unwrap_or_else(|| "".to_string()),
                 rest.collection.clone(),
                 rest.file.clone(),
                 default_conf,
@@ -164,7 +165,11 @@ struct ChatArgs {
 
     /// User prompt to query the llm with
     #[arg(short, long)]
-    prompt: String,
+    prompt: Option<String>,
+
+    /// System prompt to query the llm with
+    #[arg(short, long)]
+    system: Option<String>,
 
     /// Collection id in RAG to use in prompt
     #[arg(short, long)]
