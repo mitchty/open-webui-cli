@@ -9,9 +9,11 @@ use webui::{
 pub async fn collection(
     conf: webui::apis::configuration::Configuration,
     id: &str,
-    form: KnowledgeFileIdForm,
+    file_id: &Vec<String>,
 ) -> Result<(), Box<dyn Error>> {
-    let post = add_file_to_knowledge_by_id_knowledge_id_file_add_post(&conf, id, form).await?;
-    println!("{}", post.id);
+    for i in file_id.iter() {
+        let form = KnowledgeFileIdForm::new(i.to_owned());
+        let _post = add_file_to_knowledge_by_id_knowledge_id_file_add_post(&conf, id, form).await?;
+    }
     Ok(())
 }

@@ -37,7 +37,7 @@ See how many kind of color dragons there are in DND (allegedly I don't know I'm 
 
 ```sh
 $ curl -sLO https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf
-$ open-webui-cli upload file --name DnD_BasicRules_2018.pdf
+$ open-webui-cli upload file DnD_BasicRules_2018.pdf
 84bc4e62-c952-4904-84d1-6341a1ae1036
 $ open-webui-cli chat --model llama3.2:latest --prompt "how many color dragons are in dnd (answer with the color names only)" --file 84bc4e62-c952-4904-84d1-6341a1ae1036
 There are 3 color dragons: Blue, Green, and Red.
@@ -52,19 +52,14 @@ We can similarly use collections instead of individual files:
 ```sh
 $ curl -sLO https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf
 $ curl -sLO http://media.wizards.com/2014/downloads/dnd/PlayerDnDBasicRules_v0.2_PrintFriendly.pdf
-$ open-webui-cli upload file --name DnD_BasicRules_2018.pdf
-c90d289c-0009-4150-8ebb-6f5a0628607d
-$ open-webui-cli upload file --name PlayerDnDBasicRules_v0.2_PrintFriendly.pdf
-f9923666-d337-4514-8868-6a725967220b
 $ open-webui-cli new collection --name dnd --description "dnd bag of holding"
-1ae97ee3-c7c0-400d-9b5c-b9939def311f
-$ open-webui-cli link collection --id 1ae97ee3-c7c0-400d-9b5c-b9939def311f --file-id f9923666-d337-4514-8868-6a725967220b
-1ae97ee3-c7c0-400d-9b5c-b9939def311f
-$ open-webui-cli link collection --id 1ae97ee3-c7c0-400d-9b5c-b9939def311f --file-id c90d289c-0009-4150-8ebb-6f5a0628607d
-1ae97ee3-c7c0-400d-9b5c-b9939def311f
-$ open-webui-cli chat --model llama3.2:latest --prompt "how many color dragons are in dnd (answer with the color names only)" --collection 1ae97ee3-c7c0-400d-9b5c-b9939def311f
+0846d5d4-71ea-4e26-952c-b47e56184d3f
+$ owc upload file --collection 0846d5d4-71ea-4e26-952c-b47e56184d3f *.pdf
+1d987d9e-b115-44cd-a744-48a1605e2e79
+c2e3532f-33f1-43fc-a125-a0dd8a496369
+$ open-webui-cli chat --model llama3.2:latest --prompt "how many color dragons are in dnd (answer with the color names only)" --collection 0846d5d4-71ea-4e26-952c-b47e56184d3f
 There is only one color dragon mentioned, a red dragon.
-$ open-webui-cli chat --model llama3.2:latest --prompt "summarize the pdfs in this collection" --collection 1ae97ee3-c7c0-400d-9b5c-b9939def311f
+$ open-webui-cli chat --model llama3.2:latest --prompt "summarize the pdfs in this collection" --collection 0846d5d4-71ea-4e26-952c-b47e56184d3f
 The PDF collection contains rules and information for Dungeons & Dragons (D&D) players. The content is divided into two main sections: "DnD Basic Rules_2018.pdf" and "PlayerDnDBasicRules_v0.2_PrintFriendly.pdf".
 
 The first section, "DnD Basic Rules_2018.pdf", appears to be a basic ruleset for the game, covering various aspects such as character creation, combat, and gameplay mechanics.

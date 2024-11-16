@@ -7,7 +7,7 @@ use anyhow::Result;
 // crap I will likely be changing at some point in the future.
 use clap::{Parser, Subcommand};
 
-use webui::models::{KnowledgeFileIdForm, KnowledgeForm};
+use webui::models::KnowledgeForm;
 
 // All the actual async fn calls are in these castles. module names == top level
 // cli command, fn == subcommand name so future me can fix this in post more
@@ -23,7 +23,7 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     let api_token = super::get_val("TOKEN", cli.token, None);
     let api_uri = super::get_val("URI", cli.uri, Some("localhost".to_string()));
-    let api_port = super::get_val("PORT", cli.port, Some("8080".to_string())); // bit redundant but eh
+    let api_port = super::get_val("PORT", cli.port, Some("".to_string()));
 
     // TODO better error handling...
     if api_token.is_none() {
@@ -66,8 +66,8 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
                 &rest.model,
                 &rest.prompt,
                 &rest.system.clone().unwrap_or_else(|| "".to_string()),
-                rest.collection.clone(),
-                rest.file.clone(),
+                &rest.collection,
+                &rest.file,
                 default_conf,
             )
             .await?
@@ -95,19 +95,16 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
         },
         Commands::Link(sc) => match &sc.subcommand {
             LinkCommands::Collection(rest) => {
-                super::link::collection(
-                    webui_conf,
-                    &rest.id,
-                    KnowledgeFileIdForm::new(rest.file_id.clone()),
-                )
-                .await?
+                super::link::collection(webui_conf, &rest.id, &rest.file_id).await?
             }
         },
         Commands::Pull(sc) => match &sc.subcommand {
             PullCommands::Model(rest) => super::pull::model(ollama_conf, &rest.name).await?,
         },
         Commands::Upload(sc) => match &sc.subcommand {
-            UploadCommands::File(rest) => super::upload::file(webui_conf, &rest.name).await?,
+            UploadCommands::File(rest) => {
+                super::upload::file(webui_conf, &rest.name, rest.collection.clone()).await?
+            }
         },
         // Commands::Llm(sc) => match &sc.subcommand {
         //     Llmcommands::Query(rest) => query(&rest.model, &rest.prompt, ollama_conf).await?,
@@ -171,13 +168,13 @@ struct ChatArgs {
     #[arg(short, long)]
     system: Option<String>,
 
-    /// Collection id in RAG to use in prompt
-    #[arg(short, long)]
-    collection: Option<String>,
+    /// Collection id(s) in RAG to use in prompt
+    #[arg(short, long, value_parser, num_args = 1.., value_delimiter = ' ')]
+    collection: Vec<String>,
 
-    /// File id in RAG to use in prompt
-    #[arg(short, long)]
-    file: Option<String>,
+    /// File id(s) in RAG to use in prompt
+    #[arg(short, long, value_parser, num_args = 1.., value_delimiter = ' ')]
+    file: Vec<String>,
 }
 
 #[derive(Parser, Debug)]
@@ -216,23 +213,23 @@ enum DeleteCommands {
 
 #[derive(Parser, Debug)]
 struct CollectionDeleteArgs {
-    /// Collection id to delete
-    #[arg(short, long)]
-    id: String,
+    /// Collection id(s) to delete
+    #[arg(value_parser, num_args = 1.., value_delimiter = ' ')]
+    id: Vec<String>,
 }
 
 #[derive(Parser, Debug)]
 struct FileDeleteArgs {
-    /// File id to delete
-    #[arg(short, long)]
-    id: String,
+    /// File ids to delete
+    #[arg(value_parser, num_args = 1.., value_delimiter = ' ')]
+    id: Vec<String>,
 }
 
 #[derive(Parser, Debug)]
 struct ModelDeleteArgs {
-    /// Model name to delete
-    #[arg(short, long)]
-    name: String,
+    /// Model names to delete
+    #[arg(value_parser, num_args = 1.., value_delimiter = ' ')]
+    name: Vec<String>,
 }
 
 // New obect related args/subcommands
@@ -277,9 +274,9 @@ struct LinkCollectionArgs {
     #[arg(short, long)]
     id: String,
 
-    /// File id to link into the collection
-    #[arg(short, long)]
-    file_id: String,
+    /// File ids to link into the collection
+    #[arg(value_parser, num_args = 1.., value_delimiter = ' ')]
+    file_id: Vec<String>,
 }
 
 // New obect related args/subcommands
@@ -297,9 +294,9 @@ enum PullCommands {
 
 #[derive(Parser, Debug)]
 struct ModelPullArgs {
-    /// Model name to load, note should be form of model:tag, if tag is missing :latest will be assumed
-    #[arg(short, long)]
-    name: String,
+    /// Model names to pull, form of model:tag, if tag is missing :latest is assumed
+    #[arg(value_parser, num_args = 1.., value_delimiter = ' ')]
+    name: Vec<String>,
 }
 
 // New obect related args/subcommands
@@ -311,15 +308,16 @@ struct UploadArgs {
 
 #[derive(Subcommand, Debug)]
 enum UploadCommands {
-    /// Upload local file to RAG db
+    /// Upload local file(s) to RAG db
     File(FileUploadArgs),
 }
 
 #[derive(Parser, Debug)]
 struct FileUploadArgs {
     /// Local file name to upload
-    #[arg(short, long)]
-    name: String,
+    #[arg(value_parser, num_args = 1.., value_delimiter = ' ')]
+    name: Vec<String>,
     // In future make adding to a collection easy
-    // collection: Option<String>
+    #[arg(short, long)]
+    collection: Option<String>,
 }

@@ -36,8 +36,8 @@ pub async fn chat(
     model: &str,
     prompt: &Vec<String>,
     system: &str,
-    collection: Option<String>, // TODO vec of collections at some point
-    files: Option<String>,
+    collection: &Vec<String>,
+    files: &Vec<String>,
     conf: default::apis::configuration::Configuration,
 ) -> Result<(), Box<dyn Error>> {
     let mut messages = vec![ChatMessage {
@@ -56,17 +56,17 @@ pub async fn chat(
 
     let mut cols = None;
 
-    if let Some(c) = collection {
+    for a_collection in collection.iter() {
         outfiles.push(ChatFile {
             ftype: "collection".to_string(),
-            id: c.clone(),
+            id: a_collection.clone(),
         });
     }
 
-    if let Some(f) = files {
+    for a_file in files.iter() {
         outfiles.push(ChatFile {
             ftype: "file".to_string(),
-            id: f.clone(),
+            id: a_file.clone(),
         });
     }
 

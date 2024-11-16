@@ -37,6 +37,17 @@ impl std::error::Error for LazyError {
     }
 }
 
+// This deserves some unit tests
+fn base_uri(proto: &str, fqdn: &str, port: &str) -> String {
+    let p = if proto == "" { "http" } else { proto };
+
+    if port == "" {
+        format!("{}://{}", p, fqdn)
+    } else {
+        format!("{}://{}:{}", p, fqdn, port)
+    }
+}
+
 // TODO maybe make this crap a macro? Needs cleanup at some point all quick
 // hacks to get work done for now. Just silly boilerplate so watevs not
 // critical, just wasting loc really. Gated by however many of these openapi
@@ -60,7 +71,7 @@ pub fn webui_conf(uri: &str, port: &str, token: &str) -> webui::apis::configurat
     let def_conf = webui::apis::configuration::Configuration::default();
 
     webui::apis::configuration::Configuration {
-        base_path: format!("http://{}:{}{}", uri, port, def_conf.base_path),
+        base_path: format!("{}{}", base_uri(&"http", &uri, &port), def_conf.base_path),
         bearer_access_token: Some(token.to_string()),
         user_agent: Some("open-webui-cli/rust".to_owned()),
         ..webui::apis::configuration::Configuration::default()
@@ -73,7 +84,10 @@ pub fn default_conf(
     token: &str,
 ) -> default::apis::configuration::Configuration {
     default::apis::configuration::Configuration {
-        base_path: format!("http://{}:{}", uri, port), // base_path is http://localhost here... sigh consistency is for the birds apparently
+        // Note the default from openapi spec is http://localhost
+        // TODO should patch the openapi specs directly then generate from a
+        // fixed openapi spec
+        base_path: base_uri(&"http", &uri, &port),
         bearer_access_token: Some(token.to_string()),
         user_agent: Some("open-webui-cli/rust".to_owned()),
         ..default::apis::configuration::Configuration::default()
@@ -88,7 +102,7 @@ pub fn ollama_conf(
     let def_conf = ollama::apis::configuration::Configuration::default();
 
     ollama::apis::configuration::Configuration {
-        base_path: format!("http://{}:{}{}", uri, port, def_conf.base_path),
+        base_path: format!("{}{}", base_uri(&"http", &uri, &port), def_conf.base_path),
         bearer_access_token: Some(token.to_string()),
         user_agent: Some("open-webui-cli/rust".to_owned()),
         ..ollama::apis::configuration::Configuration::default()
@@ -101,7 +115,7 @@ pub fn ollama_conf(
 // - switches
 //
 // This will let us have default configs we can read out of xdg home, followed
-// by env vars to superced that, with the final determination being a switch.
+// by env vars to supercede that, with the final determination being a switch.
 //
 // There has gotta be a crate for something like this already. If not I should
 // write one.
