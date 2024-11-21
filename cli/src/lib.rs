@@ -37,17 +37,6 @@ impl std::error::Error for LazyError {
     }
 }
 
-// This deserves some unit tests
-fn base_uri(proto: &str, fqdn: &str, port: &str) -> String {
-    let p = if proto == "" { "http" } else { proto };
-
-    if port == "" {
-        format!("{}://{}", p, fqdn)
-    } else {
-        format!("{}://{}:{}", p, fqdn, port)
-    }
-}
-
 // TODO maybe make this crap a macro? Needs cleanup at some point all quick
 // hacks to get work done for now. Just silly boilerplate so watevs not
 // critical, just wasting loc really. Gated by however many of these openapi
@@ -67,44 +56,66 @@ fn base_uri(proto: &str, fqdn: &str, port: &str) -> String {
 //     }
 // }
 
-pub fn webui_conf(uri: &str, port: &str, token: &str) -> webui::apis::configuration::Configuration {
+pub fn webui_conf(
+    uri: &str,
+    token: &str,
+    insecure: bool,
+) -> webui::apis::configuration::Configuration {
     let def_conf = webui::apis::configuration::Configuration::default();
 
+    let client = reqwest::Client::builder()
+        .danger_accept_invalid_certs(insecure)
+        .build()
+        .expect("Could not build a client");
+
     webui::apis::configuration::Configuration {
-        base_path: format!("{}{}", base_uri(&"http", &uri, &port), def_conf.base_path),
+        base_path: format!("{}{}", &uri, def_conf.base_path),
         bearer_access_token: Some(token.to_string()),
         user_agent: Some("open-webui-cli/rust".to_owned()),
+        client,
         ..webui::apis::configuration::Configuration::default()
     }
 }
 
 pub fn default_conf(
     uri: &str,
-    port: &str,
     token: &str,
+    insecure: bool,
 ) -> default::apis::configuration::Configuration {
+    let client = reqwest::Client::builder()
+        .danger_accept_invalid_certs(insecure)
+        .build()
+        .expect("Could not build a client");
+
     default::apis::configuration::Configuration {
         // Note the default from openapi spec is http://localhost
         // TODO should patch the openapi specs directly then generate from a
         // fixed openapi spec
-        base_path: base_uri(&"http", &uri, &port),
+        base_path: uri.to_string(),
         bearer_access_token: Some(token.to_string()),
         user_agent: Some("open-webui-cli/rust".to_owned()),
+        client,
         ..default::apis::configuration::Configuration::default()
     }
 }
 
 pub fn ollama_conf(
     uri: &str,
-    port: &str,
     token: &str,
+    insecure: bool,
 ) -> ollama::apis::configuration::Configuration {
     let def_conf = ollama::apis::configuration::Configuration::default();
 
+    let client = reqwest::Client::builder()
+        .danger_accept_invalid_certs(insecure)
+        .build()
+        .expect("Could not build a client");
+
     ollama::apis::configuration::Configuration {
-        base_path: format!("{}{}", base_uri(&"http", &uri, &port), def_conf.base_path),
+        base_path: format!("{}{}", &uri, def_conf.base_path),
         bearer_access_token: Some(token.to_string()),
         user_agent: Some("open-webui-cli/rust".to_owned()),
+        client,
         ..ollama::apis::configuration::Configuration::default()
     }
 }

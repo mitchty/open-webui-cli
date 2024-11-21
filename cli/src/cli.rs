@@ -22,8 +22,7 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
     let api_token = super::get_val("TOKEN", cli.token, None);
-    let api_uri = super::get_val("URI", cli.uri, Some("localhost".to_string()));
-    let api_port = super::get_val("PORT", cli.port, Some("".to_string()));
+    let api_uri = super::get_val("URI", cli.uri, Some("http://localhost".to_string()));
 
     // TODO better error handling...
     if api_token.is_none() {
@@ -34,10 +33,6 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
         return Err(Box::new(LazyError::new("missing api_uri")));
     }
 
-    if api_port.is_none() {
-        return Err(Box::new(LazyError::new("missing api_port")));
-    }
-
     // Forgive my .clone() sins cause for this abusing the heap is whatever.
     // let rag_conf = rag_conf(
     //     &api_uri.clone().unwrap(),
@@ -46,18 +41,18 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
     // );
     let webui_conf = super::webui_conf(
         &api_uri.clone().unwrap(),
-        &api_port.clone().unwrap(),
         &api_token.clone().unwrap(),
+        cli.insecure,
     );
     let ollama_conf = super::ollama_conf(
         &api_uri.clone().unwrap(),
-        &api_port.clone().unwrap(),
         &api_token.clone().unwrap(),
+        cli.insecure,
     );
     let default_conf = super::default_conf(
         &api_uri.clone().unwrap(),
-        &api_port.clone().unwrap(),
         &api_token.clone().unwrap(),
+        cli.insecure,
     );
 
     match &cli.command {
@@ -117,14 +112,21 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Cli {
-    #[arg(short, long)]
+    #[arg(long)]
     token: Option<String>,
 
-    #[arg(short, long)]
+    #[arg(long)]
     uri: Option<String>,
 
-    #[arg(short, long)]
+    #[arg(long)]
     port: Option<String>,
+
+    #[arg(long)]
+    proto: Option<String>,
+
+    // For https, ignore ssl cert validation errors
+    #[arg(long, default_value_t = false)]
+    insecure: bool,
 
     // NYI what "verbose" looks like, placeholder for later
     // #[arg(short, long)]

@@ -11,6 +11,7 @@ default = { path = "../api/default" }
 hakari = { version = "0.1", path = "../hakari" }
 ollama = { path = "../api/ollama" }
 rag = { path = "../api/rag" }
+reqwest = { version = "0.12.9", default-features = false, features = ["stream", "rustls-tls"] }
 serde = "1.0.213"
 serde_json = "1.0.132"
 serde_with = "3.11.0"

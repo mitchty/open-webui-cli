@@ -23,7 +23,6 @@
       url = "github:oxalica/rust-overlay";
       inputs = {
         nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
       };
     };
   };
@@ -247,6 +246,8 @@
           # Extra inputs can be added here; cargo and rustc are provided by default.
           packages = with pkgs; [
             cargo-hakari
+            cargo-bloat
+            cargo-unused-features
             openapi-generator-cli
             (pkgs.writeScriptBin "fmtall" ''
               taplo fmt

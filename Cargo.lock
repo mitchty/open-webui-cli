@@ -392,13 +392,12 @@ checksum = "07e28edb80900c19c28f1072f2e8aeca7fa06b23cd4169cefe1af5aa3260783f"
 name = "hakari"
 version = "0.1.0"
 dependencies = [
+ "base64",
  "proc-macro2",
  "quote",
- "reqwest",
  "serde",
  "serde_with",
  "syn",
- "tokio",
 ]
 
 [[package]]
@@ -851,7 +850,7 @@ checksum = "1261fe7e33c73b354eab43b1273a57c8f967d0391e80353e51f764ac02cf6775"
 
 [[package]]
 name = "open-webui-cli"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "clap",
@@ -859,6 +858,7 @@ dependencies = [
  "hakari",
  "ollama",
  "rag",
+ "reqwest",
  "serde",
  "serde_json",
  "serde_with",
