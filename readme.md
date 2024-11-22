@@ -1,8 +1,8 @@
-# Very rough open-webui cli
+# Minimal open-webui-cli
 
-This is a very rough/dumb cli for open-webui. Why? Cause I need to use things outside of a webbrowser session and this makes it easier to script with than using curl all over and jq.
+This is a very minimal (for now) cli for open-webui. Why? Cause I need to use things outside of a webbrowser session and this makes it easier to script with than using curl all over and jq.
 
-Have to setup an api token to use as this is doing bearer access token as auth. You'll need to either set your token and uri via environment variables or switches.
+Have to setup an api token to use as this is doing bearer access token as auth. You'll need to either set your token and uri via environment variables or switches. For now there is no config file.
 
 ```sh
 export TOKEN=sk-40cfb1e4ac104872bbb318e9b3df3057
@@ -20,13 +20,11 @@ But in general you can at least do:
 - Rag file upload/delete
 - Chat with an llm whilst using a collection or file as input
 
-Example (note for now you have to have the models loaded already, this is next on the list to implement):
-
-Chat with a model and get result back (answer is sus but its an example):
+Pull a model, then prompt for results (answer is sus but its an example):
 
 ```sh
 $ open-webui-cli list models
-$ open-webui-cli pull model --name llama3.2:latest
+$ open-webui-cli pull model llama3.2:latest
 $ open-webui-cli list models
 llama3.2:latest
 $ open-webui-cli chat --model llama3.2:latest --prompt "how many roman imperators built walls (answer with the number only)"
@@ -54,7 +52,7 @@ $ curl -sLO https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf
 $ curl -sLO http://media.wizards.com/2014/downloads/dnd/PlayerDnDBasicRules_v0.2_PrintFriendly.pdf
 $ open-webui-cli new collection --name dnd --description "dnd bag of holding"
 0846d5d4-71ea-4e26-952c-b47e56184d3f
-$ owc upload file --collection 0846d5d4-71ea-4e26-952c-b47e56184d3f *.pdf
+$ open-webui-cli upload file --collection 0846d5d4-71ea-4e26-952c-b47e56184d3f *.pdf
 1d987d9e-b115-44cd-a744-48a1605e2e79
 c2e3532f-33f1-43fc-a125-a0dd8a496369
 $ open-webui-cli chat --model llama3.2:latest --prompt "how many color dragons are in dnd (answer with the color names only)" --collection 0846d5d4-71ea-4e26-952c-b47e56184d3f
@@ -83,10 +81,11 @@ If you have nix and direnv you can just `direnv allow` and then `nix build` to b
 ## TODO
 
 A metric ton of stuff ordered by priority (roughly):
-- anything else I end up abusing
-- define new models based on existing
-- profit?
+- anything else I end up abusing or need
+- define new models based on existing (I think this is unnecessary? The openai --system prompt should allow for that already)
+- streaming support?
+- admin related options to create tokens on a new install
 - More auth types than the api token?
-- Better error handling? (I cheaped out on a lot of this for now, using anyhow so should be able to improve it with some effort)
+- Better error handling? (I cheaped out on a lot of this for now, using anyhow so should be able to improve it with some effort for now its just the default error behavior and looks uuuuugly.)
 - unit tests? Not sure how I want to do this for the moment
 - Open up issues for anything else. Some of these apis are rather ill defined, or the openapi generator goes insane or both at times.
