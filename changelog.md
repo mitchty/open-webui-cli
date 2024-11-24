@@ -10,6 +10,13 @@ Note: In this file, do not use the hard wrap in the middle of a sentence for com
 
 ## [Unreleased]
 
+Added `info` subcommand to print out information from `/api/config`. Useful to validate everything is working.
+
+```sh
+$ cli info
+Open WebUI at http://example.com:8080 version 0.4.4
+```
+
 ## [0.1.2] - 2024-11-22
 
 Minor update, removes --port and other switches in lieu of simply URI/--uri. The default is http://localhost if not specified.

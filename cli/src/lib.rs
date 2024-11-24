@@ -3,6 +3,7 @@ use std::fmt;
 pub mod chat;
 pub mod cli; // odd man out has cli::run()
 pub mod delete;
+pub mod info;
 pub mod link;
 pub mod list;
 pub mod new;

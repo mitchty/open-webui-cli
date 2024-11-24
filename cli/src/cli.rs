@@ -95,6 +95,7 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
                 super::upload::file(webui_conf, &rest.name, rest.collection.clone()).await?
             }
         },
+        Commands::Info(_) => super::info::config(&api_uri.unwrap(), default_conf).await?,
         // Commands::Llm(sc) => match &sc.subcommand {
         //     Llmcommands::Query(rest) => query(&rest.model, &rest.prompt, ollama_conf).await?,
     };
@@ -147,6 +148,8 @@ enum Commands {
     Pull(PullArgs),
     /// Operations to upload data
     Upload(UploadArgs),
+    /// Information about the remote instance
+    Info(InfoArgs),
 }
 
 // open-webui chat related stuff (TODO keep ollama prompt?)
@@ -252,6 +255,7 @@ struct CollectionNewArgs {
     description: String,
 }
 
+// Link objects together commands
 #[derive(Parser, Debug)]
 struct LinkArgs {
     #[command(subcommand)]
@@ -275,7 +279,7 @@ struct LinkCollectionArgs {
     file_id: Vec<String>,
 }
 
-// New obect related args/subcommands
+// Pull object related args/subcommands
 #[derive(Parser, Debug)]
 struct PullArgs {
     #[command(subcommand)]
@@ -295,7 +299,7 @@ struct ModelPullArgs {
     name: Vec<String>,
 }
 
-// New obect related args/subcommands
+// Upload object related args/subcommands
 #[derive(Parser, Debug)]
 struct UploadArgs {
     #[command(subcommand)]
@@ -317,3 +321,7 @@ struct FileUploadArgs {
     #[arg(short, long)]
     collection: Option<String>,
 }
+
+// Info command to list out remote details (no args yet)
+#[derive(Parser, Debug)]
+struct InfoArgs {}
