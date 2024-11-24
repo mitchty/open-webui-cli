@@ -25,7 +25,7 @@ pub async fn model(
         // it can't be deleted, so after the post we do a get on everything and
         // ignore the response.
         if status.status != "success" {
-            return Err(Box::new(crate::LazyError::new(&format!(
+            return Err(Box::new(crate::CliError::new(&format!(
                 "pull of model {} failed with {:?}",
                 n, post
             ))));

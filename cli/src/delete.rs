@@ -36,7 +36,7 @@ pub async fn model(
         let resp = delete_model_api_delete_delete(&conf, form, None).await?;
         if resp != serde_json::Value::Bool(true) {
             // I have no idea when that api would return false
-            return Err(Box::new(crate::LazyError::new(&format!(
+            return Err(Box::new(crate::CliError::new(&format!(
                 "delete of model {} did not return true",
                 model
             ))));

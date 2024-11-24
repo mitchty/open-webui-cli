@@ -13,25 +13,25 @@ pub mod upload;
 //
 // might make sense as its own module too? Top level of the lib.rs is an option too.
 #[derive(Debug)]
-pub struct LazyError {
+pub struct CliError {
     details: String,
 }
 
-impl LazyError {
-    pub fn new(msg: &str) -> LazyError {
-        LazyError {
+impl CliError {
+    pub fn new(msg: &str) -> CliError {
+        CliError {
             details: msg.to_string(),
         }
     }
 }
 
-impl fmt::Display for LazyError {
+impl fmt::Display for CliError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.details)
     }
 }
 
-impl std::error::Error for LazyError {
+impl std::error::Error for CliError {
     fn description(&self) -> &str {
         &self.details
     }

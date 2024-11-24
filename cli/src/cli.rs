@@ -12,7 +12,7 @@ use webui::models::KnowledgeForm;
 // All the actual async fn calls are in these castles. module names == top level
 // cli command, fn == subcommand name so future me can fix this in post more
 // easily.
-use crate::LazyError;
+use crate::CliError;
 
 // TODO logging setup etc to log more data rather than dumping crap to stdout
 // like an 80s hack.
@@ -26,19 +26,13 @@ pub async fn run() -> Result<(), Box<dyn std::error::Error>> {
 
     // TODO better error handling...
     if api_token.is_none() {
-        return Err(Box::new(LazyError::new("missing api_token")));
+        return Err(Box::new(CliError::new("missing api_token")));
     }
 
     if api_uri.is_none() {
-        return Err(Box::new(LazyError::new("missing api_uri")));
+        return Err(Box::new(CliError::new("missing api_uri")));
     }
 
-    // Forgive my .clone() sins cause for this abusing the heap is whatever.
-    // let rag_conf = rag_conf(
-    //     &api_uri.clone().unwrap(),
-    //     &api_port.clone().unwrap(),
-    //     &api_token.clone().unwrap(),
-    // );
     let webui_conf = super::webui_conf(
         &api_uri.clone().unwrap(),
         &api_token.clone().unwrap(),
