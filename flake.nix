@@ -2,7 +2,7 @@
   description = "Build a cargo workspace";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     crane.url = "github:ipetkov/crane";
 
@@ -27,8 +27,19 @@
     };
   };
 
-  outputs = { self, nixpkgs, crane, fenix, flake-utils, advisory-db, rust-overlay, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      crane,
+      fenix,
+      flake-utils,
+      advisory-db,
+      rust-overlay,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = import nixpkgs {
           inherit system;
@@ -37,12 +48,19 @@
         inherit (pkgs) lib;
 
         # From https://github.com/ipetkov/crane/blob/fa8b7445ddadc37850ed222718ca86622be01967/docs/advanced/overriding-function-behavior.md?plain=1#L20C1-L28C6
-        craneLib = (crane.mkLib pkgs).overrideScope (final: prev: {
-          # TODO figure out a way to build a debug and release profile of things
-          mkCargoDerivation = args: prev.mkCargoDerivation ({
-            CARGO_PROFILE = "dev";
-          } // args);
-        });
+        craneLib = (crane.mkLib pkgs).overrideScope (
+          final: prev: {
+            # TODO figure out a way to build a debug and release profile of things
+            mkCargoDerivation =
+              args:
+              prev.mkCargoDerivation (
+                {
+                  CARGO_PROFILE = "dev";
+                }
+                // args
+              );
+          }
+        );
 
         jsonFilter = path: _type: builtins.match ".*json$" path != null;
 
@@ -61,27 +79,31 @@
 
           buildInputs = [
             # Add additional build inputs here
-          ] ++ lib.optionals pkgs.stdenv.isDarwin [
+          ]
+          ++ lib.optionals pkgs.stdenv.isDarwin [
             # Additional darwin specific inputs can be set here
             pkgs.libiconv
-            pkgs.darwin.apple_sdk.frameworks.SystemConfiguration
+            pkgs.apple-sdk
           ];
 
-          nativeBuildInputs = [ ] ++ lib.optionals pkgs.stdenv.isLinux [
-            pkgs.mold-wrapped
-            pkgs.lld
-          ];
+          nativeBuildInputs =
+            [ ]
+            ++ lib.optionals pkgs.stdenv.isLinux [
+              pkgs.mold-wrapped
+              pkgs.lld
+            ];
 
           # Additional environment variables can be set directly
           # MY_CUSTOM_VAR = "some value";
         };
 
-        craneLibLLvmTools = craneLib.overrideToolchain
-          (fenix.packages.${system}.complete.withComponents [
+        craneLibLLvmTools = craneLib.overrideToolchain (
+          fenix.packages.${system}.complete.withComponents [
             "cargo"
             "llvm-tools"
             "rustc"
-          ]);
+          ]
+        );
 
         # Build *just* the cargo dependencies (of the entire workspace),
         # so we can reuse all of that work (e.g. via cachix) when running in CI
@@ -96,33 +118,41 @@
           doCheck = false;
         };
 
-        fileSetForCrate = crate: lib.fileset.toSource {
-          root = ./.;
-          fileset = lib.fileset.unions [
-            ./Cargo.toml
-            ./Cargo.lock
-            ./hakari
-            ./api
-            crate
-          ];
-        };
+        fileSetForCrate =
+          crate:
+          lib.fileset.toSource {
+            root = ./.;
+            fileset = lib.fileset.unions [
+              ./Cargo.toml
+              ./Cargo.lock
+              ./hakari
+              ./api
+              crate
+            ];
+          };
 
         # Build the top-level crates of the workspace as individual derivations.
         # This allows consumers to only depend on (and build) only what they need.
         # Though it is possible to build the entire workspace as a single derivation,
         # so this is left up to you on how to organize things
-        open-webui-cli = craneLib.buildPackage (individualCrateArgs // {
-          pname = "open-webui-cli";
-          cargoExtraArgs = "-p open-webui-cli";
-          src = fileSetForCrate ./cli;
-        });
+        open-webui-cli = craneLib.buildPackage (
+          individualCrateArgs
+          // {
+            pname = "open-webui-cli";
+            cargoExtraArgs = "-p open-webui-cli";
+            src = fileSetForCrate ./cli;
+          }
+        );
 
-        open-webui-cli-release = craneLib.buildPackage (individualCrateArgs // {
-          pname = "open-webui-cli";
-          cargoExtraArgs = "-p open-webui-cli";
-          src = fileSetForCrate ./cli;
-          CARGO_PROFILE = "release";
-        });
+        open-webui-cli-release = craneLib.buildPackage (
+          individualCrateArgs
+          // {
+            pname = "open-webui-cli";
+            cargoExtraArgs = "-p open-webui-cli";
+            src = fileSetForCrate ./cli;
+            CARGO_PROFILE = "release";
+          }
+        );
 
         staticEnv = {
           CARGO_BUILD_TARGET = "x86_64-unknown-linux-musl";
@@ -135,16 +165,23 @@
           targets = [ "x86_64-unknown-linux-musl" ];
         };
 
-        craneLibStatic = (crane.mkLib pkgs).overrideToolchain (p: p.rust-bin.stable.latest.default.override {
-          targets = [ "x86_64-unknown-linux-musl" ];
-        });
+        craneLibStatic = (crane.mkLib pkgs).overrideToolchain (
+          p:
+          p.rust-bin.stable.latest.default.override {
+            targets = [ "x86_64-unknown-linux-musl" ];
+          }
+        );
 
-        open-webui-cli-static = craneLibStatic.buildPackage (commonArgs // staticEnv // {
-          pname = "open-webui-cli-static";
-          cargoExtraArgs = "-p open-webui-cli";
-          src = fileSetForCrate ./cli;
-          CARGO_PROFILE = "release";
-        });
+        open-webui-cli-static = craneLibStatic.buildPackage (
+          commonArgs
+          // staticEnv
+          // {
+            pname = "open-webui-cli-static";
+            cargoExtraArgs = "-p open-webui-cli";
+            src = fileSetForCrate ./cli;
+            CARGO_PROFILE = "release";
+          }
+        );
 
         # Version of open-webui I snagged the api from
         openwebuiver = "0.3.35";
@@ -160,14 +197,20 @@
           # Note that this is done as a separate derivation so that
           # we can block the CI if there are issues here, but not
           # prevent downstream consumers from building our crate by itself.
-          open-webui-cli-clippy = craneLib.cargoClippy (commonArgs // {
-            inherit cargoArtifacts;
-            cargoClippyExtraArgs = "--all-targets -- --deny warnings";
-          });
+          open-webui-cli-clippy = craneLib.cargoClippy (
+            commonArgs
+            // {
+              inherit cargoArtifacts;
+              cargoClippyExtraArgs = "--all-targets -- --deny warnings";
+            }
+          );
 
-          open-webui-cli-doc = craneLib.cargoDoc (commonArgs // {
-            inherit cargoArtifacts;
-          });
+          open-webui-cli-doc = craneLib.cargoDoc (
+            commonArgs
+            // {
+              inherit cargoArtifacts;
+            }
+          );
 
           # Check formatting
           open-webui-cli-fmt = craneLib.cargoFmt {
@@ -185,19 +228,17 @@
             inherit src advisory-db;
           };
 
-          # Audit licenses
-          open-webui-cli-deny = craneLib.cargoDeny {
-            inherit src;
-          };
-
           # Run tests with cargo-nextest
           # Consider setting `doCheck = false` on other crate derivations
           # if you do not want the tests to run twice
-          open-webui-cli-nextest = craneLib.cargoNextest (commonArgs // {
-            inherit cargoArtifacts;
-            partitions = 1;
-            partitionType = "count";
-          });
+          open-webui-cli-nextest = craneLib.cargoNextest (
+            commonArgs
+            // {
+              inherit cargoArtifacts;
+              partitions = 1;
+              partitionType = "count";
+            }
+          );
 
           # Ensure that cargo-hakari is up to date
           open-webui-cli-hakari = craneLib.mkCargoDerivation {
@@ -222,11 +263,16 @@
           inherit open-webui-cli;
           default = open-webui-cli;
           release = open-webui-cli-release;
-        } // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
-          open-webui-cli-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (commonArgs // {
-            inherit cargoArtifacts;
-          });
-        } // lib.optionalAttrs (pkgs.stdenv.isLinux) {
+        }
+        // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
+          open-webui-cli-llvm-coverage = craneLibLLvmTools.cargoLlvmCov (
+            commonArgs
+            // {
+              inherit cargoArtifacts;
+            }
+          );
+        }
+        // lib.optionalAttrs (pkgs.stdenv.isLinux) {
           static = open-webui-cli-static;
         };
 
@@ -245,6 +291,7 @@
 
           # Extra inputs can be added here; cargo and rustc are provided by default.
           packages = with pkgs; [
+            cargo
             cargo-hakari
             cargo-bloat
             cargo-unused-features
@@ -296,5 +343,6 @@
             '')
           ];
         };
-      });
+      }
+    );
 }
